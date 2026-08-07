@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Territory Run</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>Territory Run</h2>
+      <p>GPS territory-claiming runs in your browser. Sign in, allow location, start a run, and capture hex cells on the map.</p>
+      <button id="btnGoogleLogin" class="btn btn-primary" style="width:100%">Sign in with Google</button>
+      <p class="status-bar" id="loginStatus">Configure <code>js/config.js</code> then sign in.</p>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <div>
+        <h1>Territory Run</h1>
+        <div class="stats" id="headerStats">Cells: 0 · Score: 0</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button id="btnRefreshTiles" class="btn btn-ghost">Refresh map</button>
+        <button id="btnSignOut" class="btn btn-ghost">Sign out</button>
+      </div>
+    </header>
+    <div id="map"></div>
+    <div class="run-panel">
+      <div class="run-card">
+        <div class="run-metrics">
+          <div class="metric"><div class="val" id="metricDistance">0.00</div><div class="lbl">km</div></div>
+          <div class="metric"><div class="val" id="metricCells">0</div><div class="lbl">cells</div></div>
+          <div class="metric"><div class="val" id="metricPace">—</div><div class="lbl">pace</div></div>
+        </div>
+        <div class="run-actions">
+          <button id="btnStart" class="btn btn-primary">Start run</button>
+          <button id="btnPause" class="btn btn-ghost hidden">Pause</button>
+          <button id="btnFinish" class="btn btn-danger hidden">Finish & claim</button>
+        </div>
+        <p class="status-bar" id="runStatus">Ready — allow GPS when prompted.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/h3-js@4.1.0/dist/browser/h3-js.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
