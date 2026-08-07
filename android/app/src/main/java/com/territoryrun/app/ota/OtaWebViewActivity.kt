@@ -22,32 +22,33 @@ class OtaWebViewActivity : ComponentActivity() {
         webView.settings.domStorageEnabled = true
         webView.settings.allowFileAccess = false
 
-        webView.addJavascriptInterface(OtaBridge(this), "TerritoryBridge")
+        webView.addJavascriptInterface(OtaBridge(), "TerritoryBridge")
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString() ?: return false
-                return !url.startsWith("file://")
+                return !url.startsWith("file://") && !url.startsWith("https://")
             }
         }
 
-        val otaDir = File(filesDir, "ota/current")
-        val index = File(otaDir, "pages/profile.html")
-        if (index.exists()) {
-            webView.loadUrl("file://${index.absolutePath}")
-        } else {
-            // Fallback: load manifest URL hint in dev
-            webView.loadUrl("about:blank")
-            OtaManager.sync(this, BuildConfig.OTA_MANIFEST_URL) { ok ->
-                if (ok && index.exists()) {
-                    webView.loadUrl("file://${index.absolutePath}")
+        val localProfile = File(filesDir, "ota/current/pages/profile.html")
+        when {
+            localProfile.exists() -> webView.loadUrl("file://${localProfile.absolutePath}")
+            else -> {
+                // Dev: load live URL from run.8me.in (no zip needed for first test)
+                webView.loadUrl(BuildConfig.OTA_PROFILE_URL)
+                // Background: download zip for offline / next launch
+                OtaManager.sync(this, BuildConfig.OTA_MANIFEST_URL) { ok ->
+                    if (ok && localProfile.exists()) {
+                        // Optional: could switch to cached file on next open
+                    }
                 }
             }
         }
     }
 }
 
-class OtaBridge(private val activity: OtaWebViewActivity) {
+class OtaBridge {
     @android.webkit.JavascriptInterface
     fun getAccessToken(): String =
         SupabaseAuthManager.auth().currentSessionOrNull()?.accessToken ?: ""

@@ -18,7 +18,8 @@ android {
         buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL") ?: "https://territory-run-api.onrender.com"}\"")
         buildConfigField("String", "SUPABASE_URL", "\"${project.findProperty("SUPABASE_URL") ?: "https://YOUR_REF.supabase.co"}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "YOUR_ANON_KEY"}\"")
-        buildConfigField("String", "OTA_MANIFEST_URL", "\"${project.findProperty("OTA_MANIFEST_URL") ?: "https://cdn.yourdomain.com/ota/manifest.json"}\"")
+        buildConfigField("String", "OTA_MANIFEST_URL", "\"${project.findProperty("OTA_MANIFEST_URL") ?: "https://run.8me.in/ota/manifest.json"}\"")
+        buildConfigField("String", "OTA_PROFILE_URL", "\"${project.findProperty("OTA_PROFILE_URL") ?: "https://run.8me.in/ota/pages/profile.html"}\"")
         buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${project.findProperty("MAPBOX_ACCESS_TOKEN") ?: "YOUR_MAPBOX_TOKEN"}\"")
     }
 
