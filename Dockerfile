@@ -7,6 +7,8 @@ COPY backend/go.mod ./
 RUN go mod download
 
 COPY backend/ .
+# Generate go.sum inside Docker (not required on your PC)
+RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /server ./cmd/server
 
 FROM alpine:3.19
