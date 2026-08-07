@@ -63,12 +63,12 @@ git push -u origin main
 ### 2.2 Create Web Service
 
 1. [https://render.com](https://render.com) → New → **Web Service**.
-2. Connect GitHub repo `territory-run`.
+2. Connect GitHub repo `Terra-run-2`.
 3. Settings:
    - **Root Directory**: leave empty (repo root)
    - **Runtime**: Docker
-   - **Dockerfile Path**: `backend/Dockerfile`
-   - **Docker Context**: `backend`
+   - **Dockerfile Path**: `Dockerfile` (at repo root — **not** `backend/Dockerfile`)
+   - **Docker Context**: `.` (repo root)
    - **Plan**: Free
    - **Health Check Path**: `/health`
 
