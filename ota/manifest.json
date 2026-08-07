@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "min_native_version": "1.0.0",
+  "bundle_url": "https://cdn.yourdomain.com/ota/v1/bundle.zip",
+  "sha256": "REPLACE_AFTER_BUILD",
+  "rollback_version": 0,
+  "cache_ttl_sec": 86400,
+  "pages": {
+    "profile": "pages/profile.html"
+  }
+}

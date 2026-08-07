@@ -1,0 +1,23 @@
+# Dependencies
+backend/vendor/
+android/.gradle/
+android/**/build/
+android/local.properties
+ios/**/DerivedData/
+
+# Env
+.env
+*.env.local
+
+# OTA build output
+ota/dist/
+
+# IDE
+.idea/
+*.xcuserdata
+.DS_Store
+
+# Keys
+**/secrets/
+*.jks
+*.keystore

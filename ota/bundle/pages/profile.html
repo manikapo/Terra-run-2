@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https:;" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="../css/app.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="avatar" id="avatar">🏃</div>
+      <h1 id="displayName">Runner</h1>
+      <p class="subtitle" id="username">@username</p>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-value" id="cellsOwned">0</span>
+        <span class="stat-label">Cells owned</span>
+      </div>
+      <div class="stat-card accent">
+        <span class="stat-value" id="captureScore">0</span>
+        <span class="stat-label">Capture score</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="territories">0</span>
+        <span class="stat-label">Territories</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="activities">0</span>
+        <span class="stat-label">Activities</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Phase 1</h2>
+      <p>OTA profile page — update without App Store release.</p>
+      <p class="muted" id="apiStatus">Loading…</p>
+    </section>
+  </div>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

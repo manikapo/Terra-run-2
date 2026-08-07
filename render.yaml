@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: territory-run-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: INTERNAL_JOB_SECRET
+        generateValue: true
+      - key: H3_CAPTURE_RESOLUTION
+        value: "10"
+      - key: H3_TILE_RESOLUTION
+        value: "7"

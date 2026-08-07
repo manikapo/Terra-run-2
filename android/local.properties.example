@@ -1,0 +1,9 @@
+# Copy to android/local.properties (not committed)
+# sdk.dir=C\:\\Users\\YourName\\AppData\\Local\\Android\\Sdk
+#
+# Optional overrides — or set in gradle.properties:
+API_BASE_URL=https://your-api.onrender.com
+SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_ANON_KEY=eyJ...
+OTA_MANIFEST_URL=https://cdn.yourdomain.com/ota/manifest.json
+MAPBOX_ACCESS_TOKEN=pk....
