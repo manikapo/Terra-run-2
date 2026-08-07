@@ -178,6 +178,10 @@ func (s *ActivityService) captureTerritories(ctx context.Context, userID uuid.UU
 			parent = cellHex
 		}
 
+		h3Int, err := h3util.CellToInt64(cellHex)
+		if err != nil {
+			h3Int = 0
+		}
 		tag, err := s.db.Exec(ctx, `
 			INSERT INTO territory_cells (h3_index, h3_index_hex, parent_h3_hex, owner_id, status, captured_at, capture_count)
 			VALUES ($1, $2, $3, $4, 'OWNED', now(), 1)
@@ -187,7 +191,7 @@ func (s *ActivityService) captureTerritories(ctx context.Context, userID uuid.UU
 				capture_count = territory_cells.capture_count + 1,
 				status = 'OWNED'
 			WHERE territory_cells.owner_id IS NULL OR territory_cells.owner_id = EXCLUDED.owner_id
-		`, cellToInt64(cellHex), cellHex, parent, userID)
+		`, h3Int, cellHex, parent, userID)
 		if err != nil {
 			return newCells, score, err
 		}

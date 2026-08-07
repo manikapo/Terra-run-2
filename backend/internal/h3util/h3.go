@@ -1,8 +1,6 @@
 package h3util
 
 import (
-	"fmt"
-
 	"github.com/uber/h3-go/v4"
 )
 
@@ -16,11 +14,8 @@ func CellsFromRoute(points []struct{ Lat, Lon float64 }, resolution int) ([]stri
 	var cells []string
 
 	for _, p := range points {
-		cell, err := h3.LatLngToCell(h3.NewLatLng(p.Lat, p.Lon), resolution)
-		if err != nil {
-			return nil, fmt.Errorf("h3 cell: %w", err)
-		}
-		hex := h3.IndexToString(uint64(cell))
+		cell := h3.LatLngToCell(h3.NewLatLng(p.Lat, p.Lon), resolution)
+		hex := cell.String()
 		if !seen[hex] {
 			seen[hex] = true
 			cells = append(cells, hex)
@@ -31,24 +26,17 @@ func CellsFromRoute(points []struct{ Lat, Lon float64 }, resolution int) ([]stri
 
 // ParentCell returns parent H3 index at target resolution.
 func ParentCell(cellHex string, parentRes int) (string, error) {
-	idx, err := h3.StringToIndex(cellHex)
+	cell, err := h3.IndexFromString(cellHex)
 	if err != nil {
 		return "", err
 	}
-	parent, err := h3.CellToParent(h3.Cell(idx), parentRes)
-	if err != nil {
-		return "", err
-	}
-	return h3.IndexToString(uint64(parent)), nil
+	parent := cell.Parent(parentRes)
+	return parent.String(), nil
 }
 
-// TileCell parses tile path param (h3 index hex at tile resolution).
+// ParseCellHex parses an H3 index hex string.
 func ParseCellHex(hex string) (h3.Cell, error) {
-	idx, err := h3.StringToIndex(hex)
-	if err != nil {
-		return 0, err
-	}
-	return h3.Cell(idx), nil
+	return h3.IndexFromString(hex)
 }
 
 // CellBoundaryGeoJSON returns GeoJSON polygon coordinates for a cell.
@@ -57,10 +45,7 @@ func CellBoundaryGeoJSON(cellHex string) (map[string]interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	boundary, err := h3.CellToBoundary(cell)
-	if err != nil {
-		return nil, err
-	}
+	boundary := cell.Boundary()
 
 	coords := make([][]float64, 0, len(boundary)+1)
 	for _, latLng := range boundary {
@@ -82,13 +67,19 @@ func ChildrenAtResolution(tileHex string, childRes int) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	children, err := h3.CellToChildren(cell, childRes)
-	if err != nil {
-		return nil, err
-	}
+	children := cell.Children(childRes)
 	out := make([]string, len(children))
 	for i, c := range children {
-		out[i] = h3.IndexToString(uint64(c))
+		out[i] = c.String()
 	}
 	return out, nil
+}
+
+// CellToInt64 converts hex to int64 for DB storage.
+func CellToInt64(cellHex string) (int64, error) {
+	cell, err := ParseCellHex(cellHex)
+	if err != nil {
+		return 0, err
+	}
+	return int64(cell), nil
 }
