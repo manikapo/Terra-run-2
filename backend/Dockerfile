@@ -1,15 +1,18 @@
 # Build stage
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
-RUN apk add --no-cache git ca-certificates
 
-# go.sum is optional — download resolves deps from go.mod
+# h3-go requires CGO + C compiler
+RUN apk add --no-cache git ca-certificates build-base
+
 COPY go.mod ./
 RUN go mod download
 
 COPY . .
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /server ./cmd/server
+
+ENV CGO_ENABLED=1
+RUN go build -ldflags="-s -w" -o /server ./cmd/server
 
 # Runtime
 FROM alpine:3.19
