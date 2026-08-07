@@ -1,6 +1,8 @@
 package h3util
 
 import (
+	"fmt"
+
 	"github.com/uber/h3-go/v4"
 )
 
@@ -26,7 +28,7 @@ func CellsFromRoute(points []struct{ Lat, Lon float64 }, resolution int) ([]stri
 
 // ParentCell returns parent H3 index at target resolution.
 func ParentCell(cellHex string, parentRes int) (string, error) {
-	cell, err := h3.IndexFromString(cellHex)
+	cell, err := ParseCellHex(cellHex)
 	if err != nil {
 		return "", err
 	}
@@ -36,7 +38,14 @@ func ParentCell(cellHex string, parentRes int) (string, error) {
 
 // ParseCellHex parses an H3 index hex string.
 func ParseCellHex(hex string) (h3.Cell, error) {
-	return h3.IndexFromString(hex)
+	if hex == "" {
+		return 0, fmt.Errorf("empty h3 index")
+	}
+	cell := h3.Cell(h3.IndexFromString(hex))
+	if !cell.IsValid() {
+		return 0, fmt.Errorf("invalid h3 cell: %s", hex)
+	}
+	return cell, nil
 }
 
 // CellBoundaryGeoJSON returns GeoJSON polygon coordinates for a cell.
