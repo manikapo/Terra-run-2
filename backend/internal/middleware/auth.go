@@ -58,6 +58,34 @@ func AuthRequired(jwtSecret string) fiber.Handler {
 	}
 }
 
+func AuthOrGuest(jwtSecret string, allowGuest bool) fiber.Handler {
+	jwtAuth := AuthRequired(jwtSecret)
+	return func(c *fiber.Ctx) error {
+		auth := c.Get("Authorization")
+		if strings.HasPrefix(auth, "Bearer ") && len(auth) > 7 {
+			return jwtAuth(c)
+		}
+
+		if allowGuest {
+			guestID := c.Get("X-Guest-User")
+			if guestID != "" {
+				userID, err := uuid.Parse(guestID)
+				if err != nil {
+					return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid guest user id"})
+				}
+				c.Locals("user_id", userID)
+				c.Locals("user_email", "guest@"+userID.String()+".local")
+				c.Locals("is_guest", true)
+				return c.Next()
+			}
+		}
+
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "sign in required — use guest header X-Guest-User or Bearer token",
+		})
+	}
+}
+
 func InternalJobAuth(secret string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		if secret == "" {

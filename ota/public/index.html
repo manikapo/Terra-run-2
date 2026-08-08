@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Territory Run</title>
-  <style>
-    .hidden { display: none !important; }
-    #loginScreen { position: fixed; inset: 0; z-index: 2000; }
-  </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/app.css?v=3" />
 </head>
@@ -16,9 +12,9 @@
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <h2>Territory Run</h2>
-      <p>GPS territory-claiming runs in your browser. Sign in, allow location, start a run, and capture hex cells on the map.</p>
-      <button id="btnGoogleLogin" class="btn btn-primary" style="width:100%">Sign in with Google</button>
-      <p class="status-bar" id="loginStatus">Configure <code>js/config.js</code> then sign in.</p>
+      <p>GPS territory runs in your browser. Continue as guest to start — Google login comes in Phase 1.2.</p>
+      <button id="btnGuestLogin" class="btn btn-primary" style="width:100%">Continue as Guest</button>
+      <p class="status-bar" id="loginStatus">Set API_BASE_URL in js/config.js</p>
     </div>
   </div>
 
@@ -26,11 +22,11 @@
     <header class="topbar">
       <div>
         <h1>Territory Run</h1>
-        <div class="stats" id="headerStats">Cells: 0 · Score: 0</div>
+        <div class="stats" id="headerStats">Guest · Cells: 0 · Score: 0</div>
       </div>
       <div style="display:flex;gap:8px">
         <button id="btnRefreshTiles" class="btn btn-ghost">Refresh map</button>
-        <button id="btnSignOut" class="btn btn-ghost">Sign out</button>
+        <button id="btnNewGuest" class="btn btn-ghost">New guest</button>
       </div>
     </header>
     <div id="map"></div>
@@ -53,7 +49,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/h3-js@4.1.0/dist/browser/h3-js.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="js/config.js?v=3"></script>
   <script src="js/app.js?v=3"></script>
 </body>

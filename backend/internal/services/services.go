@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -307,14 +308,26 @@ func NewUserService(db *pgxpool.Pool) *UserService {
 
 func (s *UserService) EnsureProfile(ctx context.Context, userID uuid.UUID, email string) error {
 	username := email
-	if at := indexByte(email, '@'); at > 0 {
+	displayName := email
+	if email == "" || strings.Contains(email, "@guest") || strings.HasSuffix(email, ".local") {
+		short := strings.ReplaceAll(userID.String(), "-", "")
+		if len(short) > 8 {
+			short = short[:8]
+		}
+		username = "guest_" + short
+		displayName = "Guest Runner"
+		email = "guest_" + userID.String() + "@territory.run"
+	} else if at := indexByte(email, '@'); at > 0 {
 		username = email[:at]
+		displayName = username
 	}
 	_, err := s.db.Exec(ctx, `
 		INSERT INTO users (id, username, display_name, email, created_at)
 		VALUES ($1, $2, $3, $4, now())
-		ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email
-	`, userID, username, username, email)
+		ON CONFLICT (id) DO UPDATE SET
+			display_name = EXCLUDED.display_name,
+			email = EXCLUDED.email
+	`, userID, username, displayName, email)
 	return err
 }
 

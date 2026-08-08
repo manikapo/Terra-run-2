@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Config struct {
@@ -17,6 +18,7 @@ type Config struct {
 	MaxSpeedMPS           float64
 	MaxAccuracyMeters     float64
 	MinActivityDurationSec int
+	AllowGuestAuth          bool
 }
 
 func Load() Config {
@@ -32,7 +34,15 @@ func Load() Config {
 		MaxSpeedMPS:           getEnvFloat("MAX_SPEED_MPS", 7.0),
 		MaxAccuracyMeters:     getEnvFloat("MAX_ACCURACY_METERS", 40.0),
 		MinActivityDurationSec: getEnvInt("MIN_ACTIVITY_DURATION_SEC", 60),
+		AllowGuestAuth:          getEnvBool("ALLOW_GUEST_AUTH", true),
 	}
+}
+
+func getEnvBool(key string, fallback bool) bool {
+	if v := os.Getenv(key); v != "" {
+		return v == "1" || strings.EqualFold(v, "true") || v == "yes"
+	}
+	return fallback
 }
 
 func getEnv(key, fallback string) string {

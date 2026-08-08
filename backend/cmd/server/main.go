@@ -56,7 +56,7 @@ func main() {
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
-		AllowHeaders: "Authorization, Content-Type, X-Internal-Secret",
+		AllowHeaders: "Authorization, Content-Type, X-Internal-Secret, X-Guest-User",
 	}))
 
 	// Lightweight — safe for UptimeRobot every 5 min (no DB)
@@ -64,7 +64,7 @@ func main() {
 	app.Get("/", handlers.Health)
 
 	api := app.Group("/api/v1")
-	auth := middleware.AuthRequired(cfg.SupabaseJWTSecret)
+	auth := middleware.AuthOrGuest(cfg.SupabaseJWTSecret, cfg.AllowGuestAuth)
 
 	api.Get("/users/me", auth, userHandler.Me)
 
@@ -83,7 +83,7 @@ func main() {
 
 	go func() {
 		addr := ":" + cfg.Port
-		log.Printf("territory-run API listening on %s (env=%s)", addr, cfg.Env)
+		log.Printf("territory-run API listening on %s (env=%s, guest_auth=%v)", addr, cfg.Env, cfg.AllowGuestAuth)
 		if err := app.Listen(addr); err != nil {
 			log.Fatal(err)
 		}

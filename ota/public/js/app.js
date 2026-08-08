@@ -2,9 +2,10 @@
   const cfg = window.TERRITORY_CONFIG || {};
   const H3_RES = cfg.H3_CAPTURE_RES || 10;
   const TILE_RES = cfg.H3_TILE_RES || 7;
+  const GUEST_KEY = "territory_run_guest_id";
 
   let map, routeLayer, userMarker, territoryLayer;
-  let supabase, session, userId;
+  let guestId = null;
   let watchId = null;
   let recording = false;
   let paused = false;
@@ -27,6 +28,21 @@
     el.className = "status-bar" + (type ? " " + type : "");
   }
 
+  function getOrCreateGuestId() {
+    let id = localStorage.getItem(GUEST_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem(GUEST_KEY, id);
+    }
+    return id;
+  }
+
+  function newGuestId() {
+    guestId = crypto.randomUUID();
+    localStorage.setItem(GUEST_KEY, guestId);
+    return guestId;
+  }
+
   function haversineM(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const toRad = (d) => (d * Math.PI) / 180;
@@ -45,35 +61,13 @@
     return m + ":" + String(s).padStart(2, "0") + "/km";
   }
 
-  function normalizeUrl(url) {
-    if (!url) return "";
-    return url.replace(/^hhttps:\/\//i, "https://").replace(/\/$/, "");
-  }
-
-  function createSupabaseClient() {
-    if (!window.supabase || !window.supabase.createClient) {
-      throw new Error(
-        "Supabase library failed to load. Check your internet connection and refresh."
-      );
-    }
-    const url = normalizeUrl(cfg.SUPABASE_URL);
-    if (!url.startsWith("https://")) {
-      throw new Error("SUPABASE_URL must start with https:// (check for typos like hhttps://)");
-    }
-    if (!cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY.startsWith("YOUR")) {
-      throw new Error("Set SUPABASE_ANON_KEY in js/config.js (anon public key from Supabase).");
-    }
-    return window.supabase.createClient(url, cfg.SUPABASE_ANON_KEY);
-  }
-
   async function api(path, options = {}) {
-    const token = session?.access_token;
-    if (!token) throw new Error("Not signed in");
+    if (!guestId) throw new Error("Not signed in as guest");
     const res = await fetch(apiBase() + path, {
       ...options,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        "X-Guest-User": guestId,
         ...(options.headers || {}),
       },
     });
@@ -85,6 +79,10 @@
   }
 
   function initMap(lat, lon) {
+    if (map) {
+      map.setView([lat, lon], 15);
+      return;
+    }
     map = L.map("map", { zoomControl: true }).setView([lat, lon], 15);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -103,7 +101,7 @@
     territoryLayer = L.geoJSON(null, {
       style: (feature) => {
         const owner = feature.properties?.owner || "";
-        const isYou = owner && owner === userId;
+        const isYou = owner && owner === guestId;
         return {
           color: isYou ? "#3dd6c3" : "#ff8c5a",
           weight: 1,
@@ -116,8 +114,6 @@
         layer.bindPopup(
           "<div class='territory-popup'><strong>Territory</strong><br/>Owner: " +
             (p.owner || "none") +
-            "<br/>Status: " +
-            (p.status || "") +
             "</div>"
         );
       },
@@ -134,7 +130,7 @@
   }
 
   async function loadTilesForCenter() {
-    if (!map || !session) return;
+    if (!map || !guestId) return;
     const center = map.getCenter();
     const tileHex = h3.cellToString(h3.latLngToCell([center.lat, center.lng], TILE_RES));
     if (loadedTiles.has(tileHex)) return;
@@ -150,9 +146,8 @@
   async function refreshProfile() {
     try {
       const p = await api("/api/v1/users/me");
-      userId = p.user_id;
       $("headerStats").textContent =
-        "Cells: " + p.cells_owned + " · Score: " + p.total_capture_score;
+        "Guest · Cells: " + p.cells_owned + " · Score: " + p.total_capture_score;
     } catch (e) {
       console.warn("profile", e);
     }
@@ -191,8 +186,7 @@
     $("metricCells").textContent = capturedCells.size;
     if (startTime && distanceM > 100) {
       const elapsed = (Date.now() - startTime) / 1000;
-      const pace = elapsed / (distanceM / 1000);
-      $("metricPace").textContent = formatPace(pace);
+      $("metricPace").textContent = formatPace(elapsed / (distanceM / 1000));
     }
   }
 
@@ -229,7 +223,7 @@
     $("btnStart").classList.add("hidden");
     $("btnPause").classList.remove("hidden");
     $("btnFinish").classList.remove("hidden");
-    setStatus($("runStatus"), "Recording… keep moving to capture cells.", "ok");
+    setStatus($("runStatus"), "Recording… move outdoors to capture cells.", "ok");
 
     try {
       const resp = await api("/api/v1/activities", {
@@ -237,7 +231,7 @@
         body: JSON.stringify({
           started_at: new Date().toISOString(),
           idempotency_key: activityId,
-          device_info: { platform: "web", userAgent: navigator.userAgent },
+          device_info: { platform: "web-guest", userAgent: navigator.userAgent },
         }),
       });
       if (resp.activity_id) activityId = resp.activity_id;
@@ -254,35 +248,36 @@
     $("btnPause").classList.add("hidden");
     $("btnFinish").classList.add("hidden");
     $("btnStart").classList.remove("hidden");
-    setStatus($("runStatus"), "Syncing to server…");
+    setStatus($("runStatus"), "Syncing…");
 
     try {
       if (points.length > 0) {
         await api("/api/v1/activities/" + activityId + "/points", {
           method: "POST",
-          body: JSON.stringify({ points: points.map((p) => ({
-            lat: p.lat, lon: p.lon, ts: p.ts, acc: p.acc, speed: p.speed,
-          })) }),
+          body: JSON.stringify({
+            points: points.map((p) => ({
+              lat: p.lat, lon: p.lon, ts: p.ts, acc: p.acc, speed: p.speed,
+            })),
+          }),
         });
       }
       const duration = points.length >= 2
         ? points[points.length - 1].ts - points[0].ts
         : 0;
-      const cellsHint = Array.from(capturedCells);
       const result = await api("/api/v1/activities/" + activityId + "/complete", {
         method: "POST",
         body: JSON.stringify({
           ended_at: new Date().toISOString(),
           distance_m: distanceM,
           duration_s: duration,
-          h3_cells_hint: cellsHint,
+          h3_cells_hint: Array.from(capturedCells),
         }),
       });
 
       const newCells = result.capture_result?.new_cells ?? 0;
       setStatus(
         $("runStatus"),
-        "Claimed! " + newCells + " new cells · status " + result.status,
+        "Claimed! " + newCells + " new cells · " + result.status,
         "ok"
       );
 
@@ -295,40 +290,13 @@
     }
   }
 
-  async function initAuth() {
-    $("btnGoogleLogin").disabled = true;
-
-    if (!cfg.API_BASE_URL || cfg.API_BASE_URL.includes("YOUR-SERVICE")) {
-      setStatus($("loginStatus"), "Set API_BASE_URL in js/config.js (your Render URL).", "error");
-      return;
-    }
-
-    try {
-      supabase = createSupabaseClient();
-    } catch (e) {
-      setStatus($("loginStatus"), e.message, "error");
-      return;
-    }
-
-    $("btnGoogleLogin").disabled = false;
-    setStatus($("loginStatus"), "Ready — click Sign in with Google.", "ok");
-
-    const { data } = await supabase.auth.getSession();
-    session = data.session;
-
-    if (session) {
-      await showApp();
-    }
-  }
-
-  async function showApp() {
-    session = (await supabase.auth.getSession()).data.session;
-    if (!session) return;
-
+  async function enterApp() {
+    guestId = getOrCreateGuestId();
     $("loginScreen").classList.add("hidden");
     $("loginScreen").style.display = "none";
     $("app").classList.remove("hidden");
     $("app").style.display = "flex";
+
     await refreshProfile();
 
     navigator.geolocation.getCurrentPosition(
@@ -338,24 +306,25 @@
     );
   }
 
-  $("btnGoogleLogin").addEventListener("click", async () => {
-    try {
-      if (!supabase) supabase = createSupabaseClient();
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: cfg.APP_URL || window.location.href },
-      });
-    } catch (e) {
-      setStatus($("loginStatus"), e.message, "error");
+  function boot() {
+    if (!cfg.API_BASE_URL || cfg.API_BASE_URL.includes("YOUR-SERVICE")) {
+      setStatus($("loginStatus"), "Set API_BASE_URL in js/config.js", "error");
+      return;
     }
-  });
+    setStatus($("loginStatus"), "Tap Continue as Guest to open the map.", "ok");
 
-  $("btnSignOut").addEventListener("click", async () => {
+    // Auto-enter if guest already exists
+    if (localStorage.getItem(GUEST_KEY)) {
+      enterApp();
+    }
+  }
+
+  $("btnGuestLogin").addEventListener("click", () => enterApp());
+  $("btnNewGuest").addEventListener("click", () => {
     stopGpsWatch();
-    await supabase.auth.signOut();
+    newGuestId();
     location.reload();
   });
-
   $("btnStart").addEventListener("click", startRun);
   $("btnPause").addEventListener("click", () => {
     paused = !paused;
@@ -369,10 +338,5 @@
     loadTilesForCenter();
   });
 
-  supabase?.auth?.onAuthStateChange(async (_event, s) => {
-    session = s;
-    if (s) await showApp();
-  });
-
-  initAuth();
+  boot();
 })();

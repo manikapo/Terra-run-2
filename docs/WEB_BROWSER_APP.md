@@ -14,6 +14,12 @@ Native Android/iOS app → **Phase 2**.
 
 ## One-time setup (15 min)
 
+### Phase 1.1 — Guest mode (no Google login)
+
+Open **https://run.8me.in/index.html** → **Continue as Guest** → map + GPS + territory claim.
+
+Google / Supabase login → **Phase 1.2**.
+
 ### 1. Edit `js/config.js` before upload
 
 ```javascript
