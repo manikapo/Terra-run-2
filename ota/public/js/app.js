@@ -45,7 +45,27 @@
     return m + ":" + String(s).padStart(2, "0") + "/km";
   }
 
-  async function api(path, options = {}) {
+  function normalizeUrl(url) {
+    if (!url) return "";
+    return url.replace(/^hhttps:\/\//i, "https://").replace(/\/$/, "");
+  }
+
+  function createSupabaseClient() {
+    if (!window.supabase || !window.supabase.createClient) {
+      throw new Error(
+        "Supabase library failed to load. Check your internet connection and refresh."
+      );
+    }
+    const url = normalizeUrl(cfg.SUPABASE_URL);
+    if (!url.startsWith("https://")) {
+      throw new Error("SUPABASE_URL must start with https:// (check for typos like hhttps://)");
+    }
+    if (!cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY.startsWith("YOUR")) {
+      throw new Error("Set SUPABASE_ANON_KEY in js/config.js (anon public key from Supabase).");
+    }
+    return window.supabase.createClient(url, cfg.SUPABASE_ANON_KEY);
+  }
+
     const token = session?.access_token;
     if (!token) throw new Error("Not signed in");
     const res = await fetch(apiBase() + path, {
