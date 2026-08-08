@@ -66,6 +66,7 @@
     return window.supabase.createClient(url, cfg.SUPABASE_ANON_KEY);
   }
 
+  async function api(path, options = {}) {
     const token = session?.access_token;
     if (!token) throw new Error("Not signed in");
     const res = await fetch(apiBase() + path, {
@@ -295,16 +296,23 @@
   }
 
   async function initAuth() {
-    if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY.startsWith("YOUR")) {
-      setStatus($("loginStatus"), "Edit js/config.js with your Supabase + API URLs.", "error");
-      return;
-    }
+    $("btnGoogleLogin").disabled = true;
+
     if (!cfg.API_BASE_URL || cfg.API_BASE_URL.includes("YOUR-SERVICE")) {
       setStatus($("loginStatus"), "Set API_BASE_URL in js/config.js (your Render URL).", "error");
       return;
     }
 
-    supabase = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    try {
+      supabase = createSupabaseClient();
+    } catch (e) {
+      setStatus($("loginStatus"), e.message, "error");
+      return;
+    }
+
+    $("btnGoogleLogin").disabled = false;
+    setStatus($("loginStatus"), "Ready — click Sign in with Google.", "ok");
+
     const { data } = await supabase.auth.getSession();
     session = data.session;
 
@@ -330,6 +338,7 @@
 
   $("btnGoogleLogin").addEventListener("click", async () => {
     try {
+      if (!supabase) supabase = createSupabaseClient();
       await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: cfg.APP_URL || window.location.href },
