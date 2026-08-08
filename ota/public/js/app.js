@@ -326,7 +326,9 @@
     if (!session) return;
 
     $("loginScreen").classList.add("hidden");
+    $("loginScreen").style.display = "none";
     $("app").classList.remove("hidden");
+    $("app").style.display = "flex";
     await refreshProfile();
 
     navigator.geolocation.getCurrentPosition(

@@ -1,0 +1,50 @@
+# Hostinger upload checklist (fix login + map)
+
+Upload **all** files from:
+
+`C:\Users\VCL-ManishK\Projects\territory-run\ota\public\`
+
+To Hostinger folder for **run.8me.in** (your site root).
+
+## Required files
+
+```
+index.html          ← MUST re-upload (Supabase script fix)
+js/app.js           ← MUST re-upload
+js/config.js        ← fix https:// typo
+css/app.css         ← styles + .hidden class
+js/config.example.js
+```
+
+## config.js — copy exactly (paste your anon key)
+
+```javascript
+window.TERRITORY_CONFIG = {
+  API_BASE_URL: "https://terra-run-2.onrender.com",
+  SUPABASE_URL: "https://vskdjugeyxujvhpbdvnp.supabase.co",
+  SUPABASE_ANON_KEY: "eyJ...paste full anon public key",
+  APP_URL: "https://run.8me.in/index.html",
+  H3_CAPTURE_RES: 10,
+  H3_TILE_RES: 7,
+};
+```
+
+**NOT** `hhttps://` — must be `https://`
+
+## After upload
+
+1. Open https://run.8me.in/index.html
+2. Hard refresh: **Ctrl+Shift+R** (or clear cache on phone)
+3. You should see ONLY the login card (not map below it)
+4. Status: **"Ready — click Sign in with Google."**
+5. Click sign in → Google → returns to map
+
+## If login + map both show
+
+Old `app.css` missing `.hidden` — re-upload `index.html` + `css/app.css` from this folder.
+
+## If auth error persists
+
+1. Open browser **F12 → Console**
+2. Confirm `window.supabase` exists (type `window.supabase` in console)
+3. If undefined → re-upload `index.html` (Supabase UMD script line)
