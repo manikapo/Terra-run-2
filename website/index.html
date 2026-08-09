@@ -13,6 +13,11 @@
 </head>
 <body>
 
+  <!-- Intro splash (INTVL-style) -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-glyph"></div>
+  </div>
+
   <div class="page-frame" aria-hidden="true"></div>
 
   <header class="nav">
@@ -32,134 +37,152 @@
     <a href="https://play.8me.in" class="accent">Play now</a>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-content reveal">
-      <h1>
-        <span class="white">Claim your</span>
-        <span class="accent">territory</span>
-      </h1>
-      <p class="hero-desc">Transform your workouts into healthy competition. Face local challenges, steal zones, defend your map, and share your progress with your community.</p>
-      <div class="store-btns">
-        <a class="store-btn" href="https://play.8me.in">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          Play in browser
-        </a>
-        <button class="store-btn" onclick="openDownloadModal()">
-          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#34A853" d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12 3.84 21.85c-.5-.24-.84-.76-.84-1.35z"/><path fill="#FBBC04" d="M16.81 15.12L6.05 21.34l8.64-8.64z"/><path fill="#4285F4" d="M20.16 10.81c.48.27.8.78.8 1.36s-.32 1.09-.8 1.36l-3.35 1.94-4.76-4.76 4.76-4.76z"/><path fill="#EA4335" d="M6.05 2.66l10.76 6.22-3.35 1.94L6.05 2.66z"/></svg>
-          Get it on Android
-        </button>
+  <!-- ═══ STACK CARDS (hero → showcase → stats slide over each other) ═══ -->
+  <div class="stack-cards" data-stack-cards>
+
+    <!-- CARD 1: HERO -->
+    <section class="stack-card stack-card-hero" style="z-index:1">
+      <div class="stack-card-inner">
+        <div class="stack-card-shade"></div>
+        <div class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-content">
+            <h1>
+              <span class="white">Claim your</span>
+              <span class="accent">territory</span>
+            </h1>
+            <p class="hero-desc">Transform your workouts into healthy competition. Face local challenges, steal zones, defend your map, and share your progress with your community.</p>
+            <div class="store-btns">
+              <a class="store-btn" href="https://play.8me.in">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Play in browser
+              </a>
+              <button class="store-btn" onclick="openDownloadModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#34A853" d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12 3.84 21.85c-.5-.24-.84-.76-.84-1.35z"/><path fill="#FBBC04" d="M16.81 15.12L6.05 21.34l8.64-8.64z"/><path fill="#4285F4" d="M20.16 10.81c.48.27.8.78.8 1.36s-.32 1.09-.8 1.36l-3.35 1.94-4.76-4.76 4.76-4.76z"/><path fill="#EA4335" d="M6.05 2.66l10.76 6.22-3.35 1.94L6.05 2.66z"/></svg>
+                Get it on Android
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="wave-divider wave-divider-light">
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="#f2f0ea"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 2: PHONE SHOWCASE -->
+    <section class="stack-card stack-card-showcase" style="z-index:2">
+      <div class="stack-card-inner">
+        <div class="stack-card-shade"></div>
+        <div class="showcase">
+          <div class="showcase-inner">
+            <div class="showcase-copy">
+              <h2>Run or ride,<br><span class="accent">move your way.</span></h2>
+              <p>One game, two ways to play. Runs and rides each claim territory on the live map — every street, block and loop is up for grabs.</p>
+              <a class="store-btn store-btn-dark" href="https://play.8me.in">Start running free →</a>
+            </div>
+            <div class="phone-wrap">
+              <div class="phone phone-tilt">
+                <div class="phone-notch"></div>
+                <div class="phone-screen phone-screen-stack">
+                  <div class="showcase-screen active" data-screen="route"></div>
+                  <div class="showcase-screen" data-screen="territory"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wave-divider wave-divider-dark">
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,20 C480,60 960,0 1440,30 L1440,80 L0,80 Z" fill="#080c08"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 3: STATS -->
+    <section class="stack-card stack-card-stats" style="z-index:3">
+      <div class="stack-card-inner">
+        <div class="stats-section">
+          <div class="stats-bg"></div>
+          <div class="stats-content">
+            <h2><span class="white">Compete on the</span> <span class="accent">world stage.</span></h2>
+            <div class="stats-card">
+              <div class="stat-block"><span class="stat-num">∞</span><span class="stat-label">Territory to claim</span></div>
+              <div class="stat-block"><span class="stat-num">₹0</span><span class="stat-label">Cost to play</span></div>
+              <div class="stat-block"><span class="stat-num">1km</span><span class="stat-label">To get started</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /stack-cards -->
+
+  <!-- RUN / RIDE -->
+  <section class="dual">
+    <div class="dual-inner">
+      <div class="dual-header reveal">
+        <h2>Two ways to <span class="accent">play</span></h2>
+        <p>Switch your activity type whenever you like. Every metre counts toward your map.</p>
+      </div>
+      <div class="dual-grid">
+        <div class="dual-card reveal"><div class="tag">Run</div><h3>Claim your streets</h3><p>Every run and walk counts toward your map. Close loops to capture entire blocks.</p></div>
+        <div class="dual-card reveal"><div class="tag">Ride</div><h3>Cover more ground</h3><p>Any GPS route counts — walk, jog, run, or cycle. Even a 1km walk becomes territory.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- PHONE SHOWCASE -->
-  <section class="showcase">
-    <div class="showcase-inner">
-      <div class="reveal">
-        <h2>Run or ride,<br><span class="accent">move your way.</span></h2>
-        <p>One game, two ways to play. Runs and rides each claim territory on the live map — every street, block and loop is up for grabs.</p>
-        <a class="store-btn" href="https://play.8me.in">Start running free →</a>
-      </div>
-      <div class="phone-wrap reveal">
-        <div class="phone">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg">
-              <rect width="300" height="600" fill="#0a0e14"/>
-              <defs>
-                <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-                  <path d="M24 0H0V24" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-                </pattern>
-              </defs>
-              <rect width="300" height="600" fill="url(#grid)"/>
-              <polygon points="60,120 160,80 220,180 140,240 50,200" fill="rgba(255,77,0,0.3)" stroke="#FF4D00" stroke-width="1.5"/>
-              <polygon points="140,160 240,120 270,220 200,280 130,240" fill="rgba(0,197,102,0.2)" stroke="#00C566" stroke-width="1.5"/>
-              <polygon points="80,320 180,290 200,400 120,430 60,370" fill="rgba(0,87,255,0.15)" stroke="#0057FF" stroke-width="1.5"/>
-              <path d="M100 480 Q150 400 180 340 Q210 280 200 220 Q190 170 170 140" stroke="#FF4D00" stroke-width="2" fill="none" stroke-dasharray="6 4"/>
-              <circle cx="170" cy="140" r="6" fill="#FF4D00"/>
-              <circle cx="170" cy="140" r="14" fill="#FF4D00" opacity="0.2"/>
-              <text x="120" y="170" font-family="Inter,sans-serif" font-weight="800" font-size="9" fill="#FF4D00" letter-spacing="1">YOUR ZONE</text>
-              <text x="200" y="150" font-family="Inter,sans-serif" font-weight="800" font-size="9" fill="#00C566" letter-spacing="1">RIVAL</text>
-              <rect x="0" y="0" width="300" height="44" fill="rgba(0,0,0,0.5)"/>
-              <text x="150" y="28" font-family="Inter,sans-serif" font-weight="700" font-size="11" fill="white" text-anchor="middle">Infinite Me</text>
-              <rect x="20" y="520" width="260" height="56" rx="28" fill="#FF4D00"/>
-              <text x="150" y="553" font-family="Inter,sans-serif" font-weight="700" font-size="13" fill="white" text-anchor="middle">START RUN</text>
-            </svg>
+  <!-- HOW IT WORKS — scroll-driven (sticky phone + step changes) -->
+  <section class="hiw-scrub" id="how">
+    <div class="hiw-sticky">
+      <div class="hiw-progress"><div class="hiw-progress-fill"></div></div>
+      <div class="hiw-grid">
+        <div class="hiw-copy">
+          <h2 class="hiw-heading">How the <span class="accent">game works.</span></h2>
+          <div class="hiw-steps">
+            <article class="hiw-step active" data-step="0">
+              <div class="hiw-num">1</div>
+              <div class="hiw-step-body">
+                <h3>Run or ride — every move counts</h3>
+                <p>Start a run at play.8me.in, or sync from your watch. Every street, block and loop is up for grabs — from a daily 5K to a Sunday long ride.</p>
+              </div>
+            </article>
+            <article class="hiw-step" data-step="1">
+              <div class="hiw-num">2</div>
+              <div class="hiw-step-body">
+                <h3>Your route becomes your territory</h3>
+                <p>Finish your activity and the ground you covered is claimed in your colour. Close loops, link streets and grow your control of the map.</p>
+              </div>
+            </article>
+            <article class="hiw-step" data-step="2">
+              <div class="hiw-num">3</div>
+              <div class="hiw-step-body">
+                <h3>Defend your turf, steal theirs</h3>
+                <p>Territory is never safe. Rivals can take what's yours — strike back and climb the leaderboards from your neighbourhood to the world.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="hiw-phone">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen hiw-phone-screens">
+              <div class="hiw-screen active" data-screen="route"></div>
+              <div class="hiw-screen" data-screen="territory"></div>
+              <div class="hiw-screen" data-screen="leaderboard"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- RUN / RIDE CARDS -->
-  <section class="dual">
-    <div class="dual-inner">
-      <div class="dual-header reveal">
-        <h2>Two ways<br>to <span class="accent">play</span></h2>
-        <p>Switch your activity type whenever you like. Every metre counts toward your map.</p>
-      </div>
-      <div class="dual-grid">
-        <div class="dual-card reveal">
-          <div class="tag">Run</div>
-          <h3>Claim your streets</h3>
-          <p>Claim your streets on foot — every run and every walk counts toward your map. Close loops to capture entire blocks.</p>
-        </div>
-        <div class="dual-card reveal">
-          <div class="tag">Ride</div>
-          <h3>Cover more ground</h3>
-          <p>Cover more ground on two wheels. Any GPS route counts — walk, jog, run, or cycle. Even a 1km walk becomes territory.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <section class="stats-section">
-    <div class="stats-bg"></div>
-    <div class="stats-content reveal">
-      <h2><span class="white">Compete on the</span> <span class="accent">world stage.</span></h2>
-      <div class="stats-card">
-        <div class="stat-block">
-          <span class="stat-num">∞</span>
-          <span class="stat-label">Territory to claim</span>
-        </div>
-        <div class="stat-block">
-          <span class="stat-num">₹0</span>
-          <span class="stat-label">Cost to play</span>
-        </div>
-        <div class="stat-block">
-          <span class="stat-num">1km</span>
-          <span class="stat-label">To get started</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="how" id="how">
-    <div class="how-inner reveal">
-      <h2>How the <span class="accent">game works.</span></h2>
-      <div class="how-tabs">
-        <button class="how-tab active" data-step="0">
-          <span class="how-tab-num">1</span>
-          <span class="how-tab-title">Run or ride — every move counts</span>
-        </button>
-        <button class="how-tab" data-step="1">
-          <span class="how-tab-num">2</span>
-          <span class="how-tab-title">Your route becomes your territory</span>
-        </button>
-        <button class="how-tab" data-step="2">
-          <span class="how-tab-num">3</span>
-          <span class="how-tab-title">Defend your turf, steal theirs</span>
-        </button>
-      </div>
-      <div class="how-panel">
-        <p class="active" data-panel="0">Start a run in the app at play.8me.in, or sync one from your watch. Every street, block and loop is up for grabs — from a daily 5K to a Sunday long ride, every metre counts.</p>
-        <p data-panel="1">Finish your activity and the ground you covered is claimed in your colour. Close loops, link streets and push into new areas to grow your control of the map — and take it from whoever held it before.</p>
-        <p data-panel="2">Territory is never safe. Rivals can take what's yours, and you can strike back — every claim moves the leaderboards, from your local area to the whole world. Keep moving or lose ground.</p>
-      </div>
+  <!-- Mobile fallback HIW (no scroll scrub) -->
+  <section class="hiw-mobile" aria-label="How it works">
+    <h2>How the <span class="accent">game works.</span></h2>
+    <div class="hiw-mobile-steps">
+      <div class="hiw-mobile-step"><span class="hiw-num">1</span><div><h3>Run or ride</h3><p>Start at play.8me.in or sync from your watch. Every metre counts.</p></div></div>
+      <div class="hiw-mobile-step"><span class="hiw-num">2</span><div><h3>Claim territory</h3><p>Your enclosed GPS route becomes owned land on the live map.</p></div></div>
+      <div class="hiw-mobile-step"><span class="hiw-num">3</span><div><h3>Defend &amp; steal</h3><p>Take rival zones, defend yours, climb the leaderboard.</p></div></div>
     </div>
   </section>
 
@@ -169,88 +192,55 @@
     <div class="features-inner">
       <h2 class="reveal">Master the game<br><span class="accent">with battles and prizes.</span></h2>
       <div class="feature-grid">
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>Zone battles</h3>
-          <p>Run through 50%+ of a rival's zone to steal the whole thing. Push your lead, or win your ground back.</p>
-        </div>
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>Strava sync</h3>
-          <p>Connect Strava to auto-import your last 10 runs. Every future activity claims new land — no extra taps.</p>
-        </div>
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>GPX upload</h3>
-          <p>Already ran with Garmin, Coros or Apple Watch? Upload your GPX file to instantly claim territory.</p>
-        </div>
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>Capture territory</h3>
-          <p>Close a loop on the map and everything inside is yours. Run it or ride it, block by block, or all at once.</p>
-        </div>
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>Play together</h3>
-          <p>Go solo on the world map, compete with friends, or claim ground for your city on the leaderboard.</p>
-        </div>
-        <div class="feature-card reveal">
-          <span class="slash">//</span>
-          <h3>Track performance</h3>
-          <p>Zones, distance, area claimed and trends. Watch your empire build with every run and ride.</p>
-        </div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>Zone battles</h3><p>Run through 50%+ of a rival's zone to steal the whole thing.</p></div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>Strava sync</h3><p>Auto-import your last 10 runs. Every future activity claims new land.</p></div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>GPX upload</h3><p>Upload GPX from Garmin, Coros or Apple Watch to claim territory instantly.</p></div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>Capture territory</h3><p>Close a loop on the map and everything inside is yours.</p></div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>Play together</h3><p>Compete with friends or claim ground for your city on the leaderboard.</p></div>
+        <div class="feature-card reveal"><span class="slash">//</span><h3>Track performance</h3><p>Zones, distance, area claimed. Watch your empire build every run.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- DEVICE STRIP -->
   <div class="devices" aria-hidden="true">
     <div class="devices-track">
-      <span>Garmin</span><span>Strava</span><span>Apple Watch</span><span>Coros</span><span>Polar</span><span>GPX Import</span><span>Browser GPS</span>
-      <span>Garmin</span><span>Strava</span><span>Apple Watch</span><span>Coros</span><span>Polar</span><span>GPX Import</span><span>Browser GPS</span>
+      <span>Garmin</span><span>Strava</span><span>Apple Watch</span><span>Coros</span><span>Polar</span><span>GPX</span><span>Fitbit</span>
+      <span>Garmin</span><span>Strava</span><span>Apple Watch</span><span>Coros</span><span>Polar</span><span>GPX</span><span>Fitbit</span>
     </div>
   </div>
 
-  <!-- FAQ -->
   <section class="faq" id="faq">
     <div class="faq-inner">
       <h2 class="reveal">Common <span class="accent">questions.</span></h2>
       <div class="faq-item open reveal">
         <button class="faq-q">Is Infinite Me free?<span class="chevron">▾</span></button>
-        <div class="faq-a"><p>Completely free. No ads, no in-app purchases, no premium tier. Just run and claim territory.</p></div>
+        <div class="faq-a"><p>Completely free. No ads, no in-app purchases, no premium tier.</p></div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q">Do I need to download an app?<span class="chevron">▾</span></button>
-        <div class="faq-a"><p>Not mandatory. Infinite Me runs entirely in your phone's browser at play.8me.in. Works on any modern Android or iPhone. You can also download the Android app.</p></div>
+        <div class="faq-a"><p>Play in your browser at play.8me.in, or download the Android app for the best experience.</p></div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q">Can I sync with Strava?<span class="chevron">▾</span></button>
-        <div class="faq-a"><p>Yes — connect Strava to auto-import your last 10 runs and all future activities as territory on the map.</p></div>
+        <div class="faq-a"><p>Yes — connect Strava to auto-import your last 10 runs and all future activities.</p></div>
       </div>
       <div class="faq-item reveal">
-        <button class="faq-q">What happens when someone steals my zone?<span class="chevron">▾</span></button>
-        <div class="faq-a"><p>You'll get an alert in the app. Simply run through the same area again to reclaim it. There's no permanent loss — every zone can always be won back.</p></div>
+        <button class="faq-q">What if someone steals my zone?<span class="chevron">▾</span></button>
+        <div class="faq-a"><p>Run the same area again to reclaim it. Every zone can always be won back.</p></div>
       </div>
       <div class="faq-item reveal">
         <button class="faq-q">Can I use my Garmin or Apple Watch?<span class="chevron">▾</span></button>
-        <div class="faq-a"><p>Yes! Export your run as a GPX file from any GPS watch and upload it directly. Your entire run history can instantly become territory.</p></div>
+        <div class="faq-a"><p>Export GPX from any GPS watch and upload directly in the app.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta">
-    <div class="cta-inner reveal">
-      <h2>Start your conquest</h2>
+    <div class="cta-inner">
+      <h2>Start your <span class="stroke">conquest</span></h2>
       <div class="store-btns">
-        <a class="store-btn" href="https://play.8me.in">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          Play in browser
-        </a>
-        <button class="store-btn" onclick="openDownloadModal()">
-          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#34A853" d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12 3.84 21.85c-.5-.24-.84-.76-.84-1.35z"/><path fill="#FBBC04" d="M16.81 15.12L6.05 21.34l8.64-8.64z"/><path fill="#4285F4" d="M20.16 10.81c.48.27.8.78.8 1.36s-.32 1.09-.8 1.36l-3.35 1.94-4.76-4.76 4.76-4.76z"/><path fill="#EA4335" d="M6.05 2.66l10.76 6.22-3.35 1.94L6.05 2.66z"/></svg>
-          Get it on Android
-        </button>
+        <a class="store-btn" href="https://play.8me.in">Play in browser</a>
+        <button class="store-btn store-btn-outline" onclick="openDownloadModal()">Get it on Android</button>
       </div>
     </div>
   </section>
@@ -267,25 +257,21 @@
     <span class="footer-copy">© 2026 Infinite Me</span>
   </footer>
 
-  <!-- Android modal -->
   <div class="modal-overlay" id="downloadModal">
     <div class="modal-box">
       <button class="modal-close" onclick="closeDownloadModal()" aria-label="Close">×</button>
       <h3 class="modal-title">Get early access</h3>
-      <p class="modal-sub">Infinite Me is in closed testing. Follow both steps to install — takes about 2 minutes.</p>
-      <div class="modal-step">
-        <strong>Step 1</strong>
-        <p>Join the testers group with the same Google account on your phone.</p>
-        <a href="https://groups.google.com/g/infiniteme-testers" target="_blank" rel="noopener" class="modal-link">Join testers group →</a>
-      </div>
-      <div class="modal-step">
-        <strong>Step 2</strong>
-        <p>Tap "Become a tester," then install from Google Play.</p>
-        <a href="https://play.google.com/apps/testing/in.me8.infiniteme" target="_blank" rel="noopener" class="modal-link">Become a tester →</a>
-      </div>
+      <p class="modal-sub">Follow both steps to install the Android app — takes about 2 minutes.</p>
+      <div class="modal-step"><strong>Step 1</strong><p>Join the testers group with your Google account.</p><a href="https://groups.google.com/g/infiniteme-testers" target="_blank" rel="noopener" class="modal-link">Join testers group →</a></div>
+      <div class="modal-step"><strong>Step 2</strong><p>Become a tester on Google Play, then install.</p><a href="https://play.google.com/apps/testing/in.me8.infiniteme" target="_blank" rel="noopener" class="modal-link">Become a tester →</a></div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/phone-screens.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/scroll.js"></script>
 </body>
 </html>

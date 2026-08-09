@@ -1,4 +1,4 @@
-// Mobile nav
+// Mobile menu
 const navBtn = document.getElementById('navMenuBtn');
 const mobileNav = document.getElementById('mobileNav');
 
@@ -38,21 +38,6 @@ document.addEventListener('keydown', (e) => {
 window.openDownloadModal = openDownloadModal;
 window.closeDownloadModal = closeDownloadModal;
 
-// How it works tabs
-const howTabs = document.querySelectorAll('.how-tab');
-const howPanels = document.querySelectorAll('.how-panel p');
-
-howTabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    const step = tab.dataset.step;
-    howTabs.forEach((t) => t.classList.remove('active'));
-    tab.classList.add('active');
-    howPanels.forEach((p) => {
-      p.classList.toggle('active', p.dataset.panel === step);
-    });
-  });
-});
-
 // FAQ accordion
 document.querySelectorAll('.faq-q').forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -63,17 +48,28 @@ document.querySelectorAll('.faq-q').forEach((btn) => {
   });
 });
 
-// Scroll reveal
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        observer.unobserve(entry.target);
+// Fallback: populate phone screens if GSAP/scroll.js didn't run
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      if (window.phoneScreens) {
+        document.querySelectorAll('[data-screen="route"]').forEach((el) => {
+          if (!el.innerHTML.trim()) el.innerHTML = window.phoneScreens.route();
+        });
+        document.querySelectorAll('[data-screen="territory"]').forEach((el) => {
+          if (!el.innerHTML.trim()) el.innerHTML = window.phoneScreens.territory();
+        });
+        document.querySelectorAll('[data-screen="leaderboard"]').forEach((el) => {
+          if (!el.innerHTML.trim()) el.innerHTML = window.phoneScreens.leaderboard();
+        });
       }
-    });
-  },
-  { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-);
-revealEls.forEach((el) => observer.observe(el));
+    }, 100);
+  });
+} else {
+  document.documentElement.classList.add('no-motion');
+  if (window.phoneScreens) {
+    document.querySelectorAll('[data-screen="route"]').forEach((el) => { el.innerHTML = window.phoneScreens.route(); });
+    document.querySelectorAll('[data-screen="territory"]').forEach((el) => { el.innerHTML = window.phoneScreens.territory(); });
+    document.querySelectorAll('[data-screen="leaderboard"]').forEach((el) => { el.innerHTML = window.phoneScreens.leaderboard(); });
+  }
+}
