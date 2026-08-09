@@ -1,19 +1,20 @@
-// Mobile menu
-const navToggle = document.getElementById('navToggle');
-const mobileMenu = document.getElementById('mobileMenu');
+// Mobile nav
+const navBtn = document.getElementById('navMenuBtn');
+const mobileNav = document.getElementById('mobileNav');
 
-if (navToggle && mobileMenu) {
-  navToggle.addEventListener('click', () => {
-    navToggle.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
+navBtn?.addEventListener('click', () => {
+  navBtn.classList.toggle('open');
+  mobileNav?.classList.toggle('open');
+  document.body.style.overflow = mobileNav?.classList.contains('open') ? 'hidden' : '';
+});
+
+mobileNav?.querySelectorAll('a').forEach((link) => {
+  link.addEventListener('click', () => {
+    navBtn?.classList.remove('open');
+    mobileNav?.classList.remove('open');
+    document.body.style.overflow = '';
   });
-  mobileMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navToggle.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    });
-  });
-}
+});
 
 // Download modal
 function openDownloadModal() {
@@ -34,10 +35,28 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeDownloadModal();
 });
 
+window.openDownloadModal = openDownloadModal;
+window.closeDownloadModal = closeDownloadModal;
+
+// How it works tabs
+const howTabs = document.querySelectorAll('.how-tab');
+const howPanels = document.querySelectorAll('.how-panel p');
+
+howTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const step = tab.dataset.step;
+    howTabs.forEach((t) => t.classList.remove('active'));
+    tab.classList.add('active');
+    howPanels.forEach((p) => {
+      p.classList.toggle('active', p.dataset.panel === step);
+    });
+  });
+});
+
 // FAQ accordion
-document.querySelectorAll('.faq-q').forEach((q) => {
-  q.addEventListener('click', () => {
-    const item = q.parentElement;
+document.querySelectorAll('.faq-q').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
     const wasOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
     if (!wasOpen) item.classList.add('open');
@@ -46,19 +65,15 @@ document.querySelectorAll('.faq-q').forEach((q) => {
 
 // Scroll reveal
 const revealEls = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver(
+const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('in');
-        revealObserver.unobserve(entry.target);
+        observer.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
 );
-revealEls.forEach((el) => revealObserver.observe(el));
-
-// Expose modal fn for inline onclick
-window.openDownloadModal = openDownloadModal;
-window.closeDownloadModal = closeDownloadModal;
+revealEls.forEach((el) => observer.observe(el));

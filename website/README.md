@@ -1,23 +1,20 @@
 # 8me.in Landing Page
 
-Marketing site for Infinite Me — deploy the contents of this folder to your **8me.in** web root on Hostinger.
-
-## Files
-
-```
-website/
-├── index.html       # Main landing page (Conquest design)
-├── css/styles.css
-└── js/main.js
-```
+Marketing site for Infinite Me — INTVL-inspired design with 8me.in orange branding.
 
 ## Deploy to Hostinger
 
-1. Upload `index.html`, `css/`, and `js/` to your 8me.in site root.
-2. Keep existing `tutorial.html` and `privacy.html` — footer links to them.
-3. The app itself stays at **play.8me.in** (unchanged).
+Upload to your **8me.in** site root:
 
-## Local preview
+```
+index.html
+css/styles.css
+js/main.js
+```
+
+Keep existing `tutorial.html` and `privacy.html`.
+
+## Preview locally
 
 ```bash
 cd website && python3 -m http.server 8765
@@ -25,6 +22,17 @@ cd website && python3 -m http.server 8765
 
 Open http://localhost:8765
 
-## Design options
+## Design
 
-Earlier mockups are in `design-options/` for reference.
+Cloned from [INTVL](https://www.intvl.com.au/) layout and style:
+
+- Full-screen map hero with italic bold headlines
+- White pill download buttons
+- Phone mockup showcase section
+- Photo-background stats card
+- Tabbed "how it works" panel
+- Dark feature cards on running photo
+- Orange accordion FAQ
+- Orange CTA block
+
+Accent color: `#FF4D00` (8me.in orange, replacing INTVL's green).
