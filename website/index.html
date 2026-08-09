@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infinite Me — Run. Claim. Own Your World.</title>
+  <meta name="description" content="Turn every run into territory. Claim zones, steal rivals, dominate the map. Free GPS territory game for runners." />
+  <link rel="icon" type="image/png" href="https://play.8me.in/favicon.png" />
+  <link rel="apple-touch-icon" href="https://play.8me.in/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#">
+      <img src="https://play.8me.in/favicon.png" alt="Infinite Me" width="36" height="36" />
+      <span>Infinite Me</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#rules">Game rules</a></li>
+      <li><a href="#leaderboard">Leaderboard</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://play.8me.in" class="nav-cta">▶ Play now</a></li>
+      <li><a href="javascript:void(0)" class="nav-cta" onclick="openDownloadModal()">Android app</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#how">How it works</a>
+    <a href="#rules">Game rules</a>
+    <a href="#leaderboard">Leaderboard</a>
+    <a href="#faq">FAQ</a>
+    <a href="javascript:void(0)" onclick="openDownloadModal()">Download for Android</a>
+    <a href="https://play.8me.in">▶ Play now</a>
+  </div>
+
+  <section class="hero" id="home">
+    <p class="hero-eyebrow reveal">GPS Territory Game</p>
+    <h1 class="reveal d1">Claim your <span class="outline">territory</span></h1>
+    <p class="hero-desc reveal d2">Transform every run into healthy competition. Face local rivals, steal zones, defend your map, and dominate your city — one kilometre at a time.</p>
+    <div class="hero-btns reveal d3">
+      <a class="btn btn-primary" href="https://play.8me.in">▶ Start running free</a>
+      <a class="btn btn-ghost" href="#how">How it works</a>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Run</span><span class="ticker-item">Claim</span><span class="ticker-item">Steal</span>
+      <span class="ticker-item">Defend</span><span class="ticker-item">Dominate</span><span class="ticker-item">Expand</span>
+      <span class="ticker-item">Conquer</span><span class="ticker-item">Run</span><span class="ticker-item">Claim</span>
+      <span class="ticker-item">Steal</span><span class="ticker-item">Defend</span><span class="ticker-item">Dominate</span>
+      <span class="ticker-item">Expand</span><span class="ticker-item">Conquer</span>
+      <span class="ticker-item">Run</span><span class="ticker-item">Claim</span><span class="ticker-item">Steal</span>
+      <span class="ticker-item">Defend</span><span class="ticker-item">Dominate</span><span class="ticker-item">Expand</span>
+      <span class="ticker-item">Conquer</span>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item reveal">
+      <span class="stat-num">∞</span>
+      <span class="stat-lbl">Territory to claim</span>
+    </div>
+    <div class="stat-item reveal d1">
+      <span class="stat-num">₹<span>0</span></span>
+      <span class="stat-lbl">Cost to play</span>
+    </div>
+    <div class="stat-item reveal d2">
+      <span class="stat-num">1<span>km</span></span>
+      <span class="stat-lbl">To get started</span>
+    </div>
+  </div>
+
+  <section class="activity">
+    <div class="activity-card reveal">
+      <div class="activity-icon">🏃</div>
+      <h2>Run</h2>
+      <p>Claim your streets on foot — every run and every walk counts toward your map. Close loops to capture entire blocks.</p>
+    </div>
+    <div class="activity-card reveal d1">
+      <div class="activity-icon">🚴</div>
+      <h2>Ride</h2>
+      <p>Cover more ground on two wheels. Any GPS route counts — walk, jog, run, or cycle. Even a 1km walk becomes territory.</p>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="how-inner">
+      <p class="section-label reveal">How the game works</p>
+      <h2 class="section-title reveal d1">Three steps to<br><span class="stroke">domination</span></h2>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h3>Run or ride</h3>
+          <p>Go to play.8me.in on your phone. Login as guest, Google or connect Strava. Tap Start Run — GPS tracks every step in real time.</p>
+        </div>
+        <div class="step reveal d1">
+          <div class="step-num">02</div>
+          <h3>Claim territory</h3>
+          <p>Tap Finish when you stop. Your enclosed GPS route becomes owned territory on the live map. The further you run, the bigger your zone.</p>
+        </div>
+        <div class="step reveal d2">
+          <div class="step-num">03</div>
+          <h3>Defend &amp; steal</h3>
+          <p>Territory is never safe. Run through 50%+ of a rival's zone to steal it. Strike back, reclaim lost ground, and climb the leaderboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="rules">
+    <div class="features-inner">
+      <p class="section-label reveal">Game rules</p>
+      <h2 class="section-title reveal d1">Simple to start.<br>Deep to master.</h2>
+      <div class="feature-grid">
+        <div class="feature reveal">
+          <span class="feature-icon">🗺️</span>
+          <h4>Claiming territory</h4>
+          <p>Run any route — loop, zigzag, straight line. The area between your GPS path and the closing line becomes your owned zone.</p>
+          <span class="feature-tag">Core mechanic</span>
+        </div>
+        <div class="feature reveal d1">
+          <span class="feature-icon">⚔️</span>
+          <h4>Stealing zones</h4>
+          <p>Run through more than 50% of an opponent's zone to steal the whole thing. Smaller overlaps only trim their territory.</p>
+          <span class="feature-tag">Attack</span>
+        </div>
+        <div class="feature reveal d2">
+          <span class="feature-icon">🔄</span>
+          <h4>Reclaiming zones</h4>
+          <p>Lost a zone? Run the same area again to take it back. Your new run creates fresh territory following your exact route.</p>
+          <span class="feature-tag">Defense</span>
+        </div>
+        <div class="feature reveal">
+          <span class="feature-icon">📂</span>
+          <h4>GPX upload</h4>
+          <p>Already ran with Garmin, Coros or Apple Watch? Upload your GPX file to instantly claim territory from past runs.</p>
+          <span class="feature-tag">Import</span>
+        </div>
+        <div class="feature reveal d1">
+          <span class="feature-icon">🔶</span>
+          <h4>Strava sync</h4>
+          <p>Connect Strava to auto-import your last 10 runs as territory. Every future activity claims new land — no extra taps.</p>
+          <span class="feature-tag">Auto-sync</span>
+        </div>
+        <div class="feature reveal d2">
+          <span class="feature-icon">🔔</span>
+          <h4>Notifications</h4>
+          <p>Get alerts when you steal someone's territory or when they steal yours. Run reminders and game updates too.</p>
+          <span class="feature-tag">Alerts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="leaderboard" id="leaderboard">
+    <div class="lb-inner">
+      <div class="lb-header reveal">
+        <div>
+          <p class="section-label">Top runners</p>
+          <h2 class="section-title">Who owns<br><span class="stroke">the map</span></h2>
+        </div>
+        <a href="https://play.8me.in" class="lb-join">Join the competition →</a>
+      </div>
+      <table class="lb-table reveal d1">
+        <thead>
+          <tr>
+            <th style="width:52px">#</th>
+            <th>Runner</th>
+            <th>Zones</th>
+            <th>KM run</th>
+            <th>Area km²</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-num rank-1">01</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi top">RV</div>
+                <div>
+                  <div class="runner-name">Rahul Verma</div>
+                  <div class="runner-city">Delhi</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num">24</span></td>
+            <td><span class="lb-num">186</span></td>
+            <td><span class="lb-num">4.2</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num rank-2">02</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi">PS</div>
+                <div>
+                  <div class="runner-name">Priya Sharma</div>
+                  <div class="runner-city">Mumbai</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num">19</span></td>
+            <td><span class="lb-num">154</span></td>
+            <td><span class="lb-num">3.7</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num rank-3">03</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi">AK</div>
+                <div>
+                  <div class="runner-name">Arjun Kumar</div>
+                  <div class="runner-city">Bangalore</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num">17</span></td>
+            <td><span class="lb-num">132</span></td>
+            <td><span class="lb-num">3.1</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">04</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi">NP</div>
+                <div>
+                  <div class="runner-name">Neha Patel</div>
+                  <div class="runner-city">Ahmedabad</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num">14</span></td>
+            <td><span class="lb-num">118</span></td>
+            <td><span class="lb-num">2.8</span></td>
+          </tr>
+          <tr>
+            <td><span class="rank-num">05</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi">VR</div>
+                <div>
+                  <div class="runner-name">Vikram Rao</div>
+                  <div class="runner-city">Hyderabad</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num">11</span></td>
+            <td><span class="lb-num">97</span></td>
+            <td><span class="lb-num">2.1</span></td>
+          </tr>
+          <tr class="you-row">
+            <td><span class="rank-num">?</span></td>
+            <td>
+              <div class="runner-row">
+                <div class="runner-avi">YOU</div>
+                <div>
+                  <div class="runner-name" style="color:#aaa">Your name here</div>
+                  <div class="runner-city">Your city</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="lb-num" style="color:#ccc">—</span></td>
+            <td><span class="lb-num" style="color:#ccc">—</span></td>
+            <td><span class="lb-num" style="color:#ccc">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="faq-inner">
+      <div class="faq-left reveal">
+        <p class="section-label">Questions</p>
+        <h2 class="section-title">Got<br>questions?</h2>
+        <p>Everything you need to know before your first run.</p>
+        <a class="btn btn-primary" href="https://play.8me.in">▶ Just start running</a>
+      </div>
+      <div class="faq-list reveal d1">
+        <div class="faq-item open">
+          <div class="faq-q">Do I need to create an account?</div>
+          <div class="faq-a">No — start playing instantly as a guest with just your name. Connect Strava to save your progress permanently and sync your runs automatically.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Is Infinite Me free?</div>
+          <div class="faq-a">Completely free. No ads, no in-app purchases, no premium tier. Just run and claim territory.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Do I need to download an app?</div>
+          <div class="faq-a">Not mandatory. Infinite Me runs entirely in your phone's browser at play.8me.in. Works on any modern Android or iPhone. You can also download the Android app for the best experience.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What happens when someone steals my zone?</div>
+          <div class="faq-a">You'll get an alert in the app, or enable notifications from your profile page in the browser. Simply run through the same area again to reclaim it — every zone can always be won back.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Can I use my Garmin or Apple Watch?</div>
+          <div class="faq-a">Yes! Export your run as a GPX file from any GPS watch and upload it directly in the app. Your entire run history can instantly become territory.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Does it work if I just walk?</div>
+          <div class="faq-a">Absolutely. Any GPS route counts — walk, jog, run, or cycle. Even a 1km walk becomes territory. The game is for everyone who moves.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner reveal">
+      <h2>Start your <span>conquest</span></h2>
+      <p>Every street, every park, every route — unclaimed and ready to be yours. Takes 60 seconds to start.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary" href="https://play.8me.in">▶ Start running free</a>
+        <a class="btn btn-ghost" href="https://8me.in/tutorial.html">Read the tutorial</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="#" class="footer-logo">∞ <span>Infinite</span> Me</a>
+    <ul class="footer-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#rules">Game rules</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://8me.in/tutorial.html">Tutorial</a></li>
+      <li><a href="https://8me.in/privacy.html">Privacy</a></li>
+      <li><a href="mailto:hello@8me.in">Contact</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 Infinite Me</span>
+  </footer>
+
+  <!-- Android download modal -->
+  <div class="modal-overlay" id="downloadModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeDownloadModal()" aria-label="Close">×</button>
+      <h3 class="modal-title">Get early access</h3>
+      <p class="modal-sub">Infinite Me is in closed testing. Follow both steps below to install — takes about 2 minutes.</p>
+      <div class="modal-step">
+        <div class="modal-step-num">Step 1</div>
+        <div class="modal-step-title">Join the testers group</div>
+        <p>Click "Join group" using the same Google account you use on your phone.</p>
+        <a href="https://groups.google.com/g/infiniteme-testers" target="_blank" rel="noopener" class="modal-link-btn">Join testers group →</a>
+      </div>
+      <div class="modal-step">
+        <div class="modal-step-num">Step 2</div>
+        <div class="modal-step-title">Opt in on Google Play</div>
+        <p>Tap "Become a tester," then install the app from Google Play.</p>
+        <a href="https://play.google.com/apps/testing/in.me8.infiniteme" target="_blank" rel="noopener" class="modal-link-btn">Become a tester →</a>
+      </div>
+      <p class="modal-footnote">Found a bug or have feedback? Email <a href="mailto:developer@8me.in">developer@8me.in</a></p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
