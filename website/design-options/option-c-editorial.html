@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option C — Editorial | Infinite Me</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #FF4D00;
+      --orange-light: #FF6A25;
+      --black: #0D0D0D;
+      --white: #FFFFFF;
+      --off-white: #F5F3EE;
+      --gray: #6B6B6B;
+      --light-gray: #E8E5DF;
+      --green: #00C566;
+      --font: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--off-white); color: var(--black); }
+
+    .design-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: var(--orange); color: var(--white);
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: center; padding: 8px;
+    }
+    .design-banner a { color: var(--white); margin-left: 16px; }
+
+    /* MINIMAL NAV */
+    nav {
+      position: fixed; top: 32px; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px; mix-blend-mode: difference;
+    }
+    .logo {
+      font-family: var(--font); font-weight: 900; font-size: 18px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
+    .nav-right a {
+      font-family: var(--font); font-weight: 600; font-size: 13px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-play {
+      background: var(--orange); padding: 10px 20px !important;
+    }
+
+    /* EDITORIAL HERO */
+    .hero {
+      min-height: 100vh; padding: 140px 48px 80px;
+      background: var(--off-white);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%);
+      font-family: var(--font); font-weight: 900;
+      font-size: clamp(120px, 22vw, 280px);
+      text-transform: uppercase; letter-spacing: -0.04em;
+      color: transparent; -webkit-text-stroke: 1px rgba(13,13,13,0.08);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .hero-issue {
+      font-family: var(--font); font-weight: 600; font-size: 12px;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: var(--font); font-weight: 900;
+      font-size: clamp(64px, 12vw, 160px);
+      line-height: 0.88; letter-spacing: -0.03em;
+      text-transform: uppercase; margin-bottom: 40px;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--orange);
+    }
+    .hero-bottom {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px; align-items: end;
+      border-top: 2px solid var(--black); padding-top: 32px;
+    }
+    .hero-tagline { font-size: 20px; line-height: 1.5; font-weight: 500; grid-column: span 2; }
+    .hero-cta-link {
+      font-family: var(--font); font-weight: 800; font-size: 16px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+      display: flex; align-items: center; gap: 12px;
+      justify-self: end;
+    }
+    .hero-cta-link::after {
+      content: '→'; display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; background: var(--orange); color: var(--white);
+      font-size: 20px;
+    }
+
+    /* PULL QUOTE STRIP */
+    .quote-strip {
+      background: var(--black); color: var(--white);
+      padding: 80px 48px; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: center;
+    }
+    .quote-stat {
+      font-family: var(--font); font-weight: 900; font-size: clamp(64px, 10vw, 120px);
+      line-height: 0.9; color: var(--orange);
+    }
+    .quote-stat small {
+      display: block; font-size: 14px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 8px;
+    }
+    .quote-text {
+      font-family: var(--font); font-weight: 700; font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.15; text-transform: uppercase; font-style: italic;
+    }
+
+    /* TIMELINE HOW IT WORKS */
+    .timeline-section { padding: 120px 48px; }
+    .timeline-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px; max-width: 1200px; margin-left: auto; margin-right: auto;
+    }
+    .timeline-header h2 {
+      font-family: var(--font); font-weight: 900; font-size: clamp(40px, 6vw, 80px);
+      text-transform: uppercase; line-height: 0.95;
+    }
+    .timeline-header p { max-width: 320px; color: var(--gray); line-height: 1.6; font-size: 15px; }
+    .timeline {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      max-width: 1200px; margin: 0 auto; position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; top: 24px; left: 0; right: 0;
+      height: 2px; background: var(--black);
+    }
+    .tl-item { padding: 0 16px; }
+    .tl-dot {
+      width: 48px; height: 48px; background: var(--orange); color: var(--white);
+      font-family: var(--font); font-weight: 900; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 32px; position: relative; z-index: 1;
+    }
+    .tl-item h3 {
+      font-family: var(--font); font-weight: 800; font-size: 22px;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .tl-item p { font-size: 14px; color: var(--gray); line-height: 1.6; }
+
+    /* FEATURE ROWS - alternating */
+    .feature-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+    .feature-visual {
+      background: var(--black); display: flex; align-items: center; justify-content: center;
+      padding: 48px; position: relative; overflow: hidden;
+    }
+    .feature-visual.light { background: var(--white); border: 1px solid var(--light-gray); }
+    .feature-visual .big-num {
+      font-family: var(--font); font-weight: 900; font-size: 200px;
+      color: rgba(255,77,0,0.15); line-height: 1;
+    }
+    .feature-copy {
+      padding: 80px 64px; display: flex; flex-direction: column; justify-content: center;
+      background: var(--white);
+    }
+    .feature-row:nth-child(even) .feature-copy { background: var(--off-white); }
+    .feature-label {
+      font-family: var(--font); font-weight: 700; font-size: 12px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange);
+      margin-bottom: 16px;
+    }
+    .feature-copy h3 {
+      font-family: var(--font); font-weight: 900; font-size: clamp(32px, 4vw, 56px);
+      text-transform: uppercase; line-height: 1; margin-bottom: 20px;
+    }
+    .feature-copy p { color: var(--gray); line-height: 1.7; font-size: 16px; max-width: 400px; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: var(--orange); color: var(--white);
+    }
+    .stats-row .s-item {
+      padding: 48px 32px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+    .stats-row .s-item:last-child { border-right: none; }
+    .s-num {
+      font-family: var(--font); font-weight: 900; font-size: 48px; line-height: 1; display: block;
+    }
+    .s-lbl {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      opacity: 0.7; margin-top: 8px; display: block;
+    }
+
+    /* FAQ - accordion style */
+    .faq-section {
+      padding: 120px 48px; max-width: 900px; margin: 0 auto;
+    }
+    .faq-section h2 {
+      font-family: var(--font); font-weight: 900; font-size: 64px;
+      text-transform: uppercase; margin-bottom: 48px;
+    }
+    .faq-q {
+      border-top: 2px solid var(--black); padding: 28px 0;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    }
+    .faq-q:last-child { border-bottom: 2px solid var(--black); }
+    .faq-q h4 {
+      font-family: var(--font); font-weight: 700; font-size: 22px;
+      text-transform: uppercase; flex: 1;
+    }
+    .faq-q p { color: var(--gray); font-size: 15px; line-height: 1.6; max-width: 480px; margin-top: 8px; }
+    .faq-arrow { font-family: var(--font); font-size: 24px; color: var(--orange); flex-shrink: 0; }
+
+    /* FINAL CTA */
+    .final-cta {
+      background: var(--black); color: var(--white);
+      padding: 120px 48px; text-align: center;
+    }
+    .final-cta h2 {
+      font-family: var(--font); font-weight: 900;
+      font-size: clamp(48px, 8vw, 100px);
+      text-transform: uppercase; line-height: 0.9; margin-bottom: 40px;
+    }
+    .final-cta h2 span { font-style: italic; color: var(--orange); }
+    .btn-orange {
+      font-family: var(--font); font-weight: 800; font-size: 14px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--orange); color: var(--white);
+      padding: 18px 48px; text-decoration: none; display: inline-block;
+    }
+
+    footer {
+      padding: 32px 48px; display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--gray); letter-spacing: 0.05em;
+      text-transform: uppercase; border-top: 1px solid var(--light-gray);
+    }
+
+    @media (max-width: 900px) {
+      .hero-bottom, .quote-strip, .timeline, .feature-row, .stats-row { grid-template-columns: 1fr; }
+      .hero-tagline { grid-column: span 1; }
+      .feature-row.reverse { direction: ltr; }
+      nav { padding: 20px 24px; }
+      .hero, .timeline-section, .faq-section, .final-cta { padding-left: 24px; padding-right: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="design-banner">
+    Design Preview — Option C: Editorial
+    <a href="index.html">← All options</a>
+  </div>
+
+  <nav>
+    <a class="logo" href="#">∞ 8ME</a>
+    <div class="nav-right">
+      <a href="#how">How</a>
+      <a href="#faq">FAQ</a>
+      <a href="#" class="nav-play">Play</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg-text">Territory</div>
+    <div class="hero-content">
+      <p class="hero-issue">Issue 01 — The GPS Game</p>
+      <h1>Every run<br>is a <em>conquest</em></h1>
+      <div class="hero-bottom">
+        <p class="hero-tagline">Turn kilometres into territory. Claim zones on a live map, steal from rivals, and own your city — one route at a time.</p>
+        <a class="hero-cta-link" href="#">Start running</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-strip">
+    <div>
+      <span class="quote-stat">₹0<small>Forever free</small></span>
+    </div>
+    <p class="quote-text">"The streets you run today become the empire you defend tomorrow."</p>
+  </section>
+
+  <section class="timeline-section" id="how">
+    <div class="timeline-header">
+      <h2>How it<br>works</h2>
+      <p>Four steps from your first kilometre to dominating the leaderboard. No account required to start.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">01</div>
+        <h3>Open</h3>
+        <p>Visit play.8me.in on your phone. Guest login takes 10 seconds.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">02</div>
+        <h3>Run</h3>
+        <p>GPS tracks your route in real time. Watch the map draw as you move.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">03</div>
+        <h3>Claim</h3>
+        <p>Finish your run. The enclosed area becomes your owned territory.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">04</div>
+        <h3>Dominate</h3>
+        <p>Steal, defend, expand. Climb from your neighbourhood to the top.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="feature-row">
+    <div class="feature-visual">
+      <span class="big-num">50%</span>
+    </div>
+    <div class="feature-copy">
+      <span class="feature-label">Attack mechanic</span>
+      <h3>Steal entire zones</h3>
+      <p>Run through more than half of a rival's territory to claim the whole thing. Smaller overlaps trim their ground — precision beats distance.</p>
+    </div>
+  </div>
+
+  <div class="feature-row reverse">
+    <div class="feature-visual light">
+      <span class="big-num" style="color:rgba(0,197,102,0.2)">GPX</span>
+    </div>
+    <div class="feature-copy">
+      <span class="feature-label">Import runs</span>
+      <h3>Your history counts</h3>
+      <p>Connect Strava for auto-sync, or upload GPX files from Garmin, Coros, or Apple Watch. Past runs become territory instantly.</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="s-item"><span class="s-num">12K+</span><span class="s-lbl">Active runners</span></div>
+    <div class="s-item"><span class="s-num">48</span><span class="s-lbl">Cities</span></div>
+    <div class="s-item"><span class="s-num">2.1M</span><span class="s-lbl">km² claimed</span></div>
+    <div class="s-item"><span class="s-num">1km</span><span class="s-lbl">Min. to start</span></div>
+  </div>
+
+  <section class="faq-section" id="faq">
+    <h2>Questions</h2>
+    <div class="faq-q">
+      <div>
+        <h4>Do I need an account?</h4>
+        <p>No — start as a guest instantly. Connect Strava later to save progress permanently.</p>
+      </div>
+      <span class="faq-arrow">+</span>
+    </div>
+    <div class="faq-q">
+      <div>
+        <h4>Is it really free?</h4>
+        <p>Completely. No ads, no premium tier, no in-app purchases. Ever.</p>
+      </div>
+      <span class="faq-arrow">+</span>
+    </div>
+    <div class="faq-q">
+      <div>
+        <h4>What if someone steals my zone?</h4>
+        <p>Run the same area again to reclaim it. Every zone can always be won back.</p>
+      </div>
+      <span class="faq-arrow">+</span>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <h2>Your city<br>is <span>waiting</span></h2>
+    <a class="btn-orange" href="#">Play at play.8me.in</a>
+  </section>
+
+  <footer>
+    <span>© 2026 Infinite Me</span>
+    <span>8me.in</span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option A — Conquest | Infinite Me</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #FF4D00;
+      --orange-light: #FF6A25;
+      --black: #0D0D0D;
+      --white: #FFFFFF;
+      --off-white: #F5F3EE;
+      --gray: #6B6B6B;
+      --green: #00C566;
+      --font: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
+
+    .design-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: var(--orange); color: var(--white);
+      font-family: var(--font); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: center; padding: 8px;
+    }
+    .design-banner a { color: var(--white); margin-left: 16px; }
+
+    nav {
+      position: fixed; top: 32px; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(13,13,13,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo { font-family: var(--font); font-weight: 900; font-size: 20px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); text-decoration: none; }
+    .logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-family: var(--font); font-weight: 600; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); text-decoration: none; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--orange) !important; color: var(--white) !important; padding: 10px 20px !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; padding: 140px 48px 80px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,77,0,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: var(--font); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange);
+      margin-bottom: 24px; position: relative;
+    }
+    .hero h1 {
+      font-family: var(--font); font-weight: 900;
+      font-size: clamp(56px, 10vw, 120px); line-height: 0.95;
+      letter-spacing: -0.02em; text-transform: uppercase;
+      max-width: 900px; position: relative;
+    }
+    .hero h1 .outline {
+      -webkit-text-stroke: 2px rgba(255,255,255,0.4);
+      color: transparent;
+    }
+    .hero-desc {
+      font-size: 18px; line-height: 1.7; color: rgba(255,255,255,0.55);
+      max-width: 520px; margin: 32px auto 40px; position: relative;
+    }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .btn {
+      font-family: var(--font); font-weight: 800; font-size: 14px;
+      letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+      padding: 16px 32px; border-radius: 2px; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--orange); color: var(--white); }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,0.7); border: 1.5px solid rgba(255,255,255,0.2); }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    .stat-item {
+      padding: 48px 32px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--font); font-weight: 900; font-size: clamp(40px, 6vw, 64px);
+      color: var(--white); line-height: 1; display: block;
+    }
+    .stat-num span { color: var(--orange); }
+    .stat-lbl {
+      font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); margin-top: 8px; display: block;
+    }
+
+    /* ACTIVITY TYPES */
+    .activity {
+      padding: 100px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+      background: rgba(255,255,255,0.06);
+    }
+    .activity-card {
+      background: var(--black); padding: 64px 48px; position: relative; overflow: hidden;
+    }
+    .activity-card::after {
+      content: ''; position: absolute; bottom: -60px; right: -60px;
+      width: 200px; height: 200px; background: var(--orange); opacity: 0.08;
+      border-radius: 50%;
+    }
+    .activity-card h2 {
+      font-family: var(--font); font-weight: 900; font-size: 48px;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .activity-card p { color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 360px; }
+    .activity-icon { font-size: 48px; margin-bottom: 24px; }
+
+    /* HOW IT WORKS */
+    .how {
+      padding: 120px 48px; background: var(--off-white); color: var(--black);
+    }
+    .section-label {
+      font-family: var(--font); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font); font-weight: 900; font-size: clamp(40px, 6vw, 72px);
+      text-transform: uppercase; line-height: 1; margin-bottom: 64px;
+    }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+    .step-num {
+      font-family: var(--font); font-weight: 900; font-size: 80px;
+      color: rgba(255,77,0,0.15); line-height: 1; margin-bottom: 16px;
+    }
+    .step h3 {
+      font-family: var(--font); font-weight: 800; font-size: 24px;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .step p { color: var(--gray); line-height: 1.7; font-size: 15px; }
+
+    /* FEATURES */
+    .features {
+      padding: 100px 48px; background: var(--black);
+    }
+    .features .section-title { color: var(--white); margin-bottom: 48px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .feature {
+      background: rgba(255,255,255,0.03); padding: 40px 32px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .feature h4 {
+      font-family: var(--font); font-weight: 800; font-size: 18px;
+      text-transform: uppercase; margin-bottom: 12px; color: var(--orange);
+    }
+    .feature p { color: rgba(255,255,255,0.45); font-size: 14px; line-height: 1.6; }
+
+    /* FAQ */
+    .faq { padding: 100px 48px; background: var(--off-white); color: var(--black); }
+    .faq-list { max-width: 720px; margin-top: 48px; }
+    .faq-item { border-bottom: 1px solid var(--light-gray, #E8E5DF); padding: 24px 0; }
+    .faq-item h4 { font-family: var(--font); font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+    .faq-item p { color: var(--gray); font-size: 15px; line-height: 1.6; }
+
+    /* CTA */
+    .cta {
+      padding: 120px 48px; text-align: center;
+      background: linear-gradient(180deg, var(--black) 0%, #1a0a00 100%);
+      position: relative;
+    }
+    .cta h2 {
+      font-family: var(--font); font-weight: 900; font-size: clamp(48px, 8vw, 88px);
+      text-transform: uppercase; line-height: 0.95; margin-bottom: 32px;
+    }
+    .cta h2 span { color: var(--orange); }
+
+    footer {
+      padding: 32px 48px; display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06); font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero, .how, .features, .faq, .cta { padding-left: 24px; padding-right: 24px; }
+      .activity, .steps, .feature-grid, .stats-bar { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    }
+  </style>
+</head>
+<body>
+  <div class="design-banner">
+    Design Preview — Option A: Conquest
+    <a href="index.html">← All options</a>
+  </div>
+
+  <nav>
+    <a class="logo" href="#">Infinite <span>Me</span></a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#" class="nav-cta">Play now</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-eyebrow">GPS Territory Game</p>
+    <h1>Claim your <span class="outline">territory</span></h1>
+    <p class="hero-desc">Transform every run into healthy competition. Face local rivals, steal zones, defend your map, and dominate your city — one kilometre at a time.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#">Start running free</a>
+      <a class="btn btn-ghost" href="#">Watch how it works</a>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">12<span>K+</span></span>
+      <span class="stat-lbl">Runners competing</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">48</span>
+      <span class="stat-lbl">Cities in play</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">2.1<span>M</span></span>
+      <span class="stat-lbl">km² claimed</span>
+    </div>
+  </div>
+
+  <section class="activity">
+    <div class="activity-card">
+      <div class="activity-icon">🏃</div>
+      <h2>Run</h2>
+      <p>Claim your streets on foot — every run and every walk counts toward your map. Close loops to capture entire blocks.</p>
+    </div>
+    <div class="activity-card">
+      <div class="activity-icon">🚴</div>
+      <h2>Ride</h2>
+      <p>Cover more ground on two wheels. Rides claim territory in their own game — cyclists compete with cyclists.</p>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <p class="section-label">How the game works</p>
+    <h2 class="section-title">Three steps to<br>domination</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Run or ride</h3>
+        <p>Start in the app or sync from your watch. Every street, block and loop is up for grabs — from a daily 5K to a Sunday long run.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Claim territory</h3>
+        <p>Finish your activity and the ground you covered is claimed in your colour. Close loops, link streets and grow your control of the map.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Defend &amp; steal</h3>
+        <p>Territory is never safe. Rivals can take what's yours — strike back and climb the leaderboards from your neighbourhood to the world.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <p class="section-label">Master the game</p>
+    <h2 class="section-title">Battles, prizes<br>&amp; more</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h4>Zone battles</h4>
+        <p>Run through 50%+ of a rival's zone to steal the whole thing. Precision matters as much as distance.</p>
+      </div>
+      <div class="feature">
+        <h4>Strava sync</h4>
+        <p>Connect once and your runs auto-import. Every future activity claims new land — no extra taps.</p>
+      </div>
+      <div class="feature">
+        <h4>GPX upload</h4>
+        <p>Already ran with Garmin or Apple Watch? Upload your GPX file to instantly claim territory.</p>
+      </div>
+      <div class="feature">
+        <h4>Live notifications</h4>
+        <p>Get alerted when someone steals your zone or when you've reclaimed lost ground.</p>
+      </div>
+      <div class="feature">
+        <h4>Leaderboards</h4>
+        <p>Track zones, distance and area claimed. Compete locally or climb the global rankings.</p>
+      </div>
+      <div class="feature">
+        <h4>100% free</h4>
+        <p>No ads, no premium tier, no subscription. Just run and claim territory.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <p class="section-label">Common questions</p>
+    <h2 class="section-title">Got questions?</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <h4>Is Infinite Me free?</h4>
+        <p>Completely free. No ads, no in-app purchases, no premium tier.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Do I need to download an app?</h4>
+        <p>Play entirely in your browser at play.8me.in, or download the Android app for the best experience.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Can I sync with Strava?</h4>
+        <p>Yes — connect Strava to auto-import your last 10 runs and all future activities.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Start your <span>conquest</span></h2>
+    <a class="btn btn-primary" href="#">Play at play.8me.in →</a>
+  </section>
+
+  <footer>
+    <span>© 2026 Infinite Me</span>
+    <span>developer@8me.in</span>
+  </footer>
+</body>
+</html>
