@@ -1,0 +1,87 @@
+/* 8me.in brand overrides — maps INTVL signal greens to orange palette */
+
+:root {
+  --8me-orange: #FF4D00;
+  --8me-orange-light: #FF6A25;
+  --8me-black: #0D0D0D;
+  --8me-offwhite: #F5F3EE;
+}
+
+/* Signal palette: green → orange */
+.bg-signal-100 { background-color: rgb(255 237 229) !important; }
+.bg-signal-300 { background-color: rgb(255 163 122) !important; }
+.bg-signal-400 { background-color: rgb(255 77 0) !important; }
+.bg-signal-400\/10 { background-color: rgb(255 77 0 / 0.1) !important; }
+.bg-signal-400\/20 { background-color: rgb(255 77 0 / 0.2) !important; }
+.bg-signal-700 { background-color: rgb(77 23 0) !important; }
+
+.text-signal-300 { color: rgb(255 163 122) !important; }
+.text-signal-400 { color: rgb(255 77 0) !important; }
+.text-signal-600 { color: rgb(153 46 0) !important; }
+.text-signal-700 { color: rgb(77 23 0) !important; }
+
+.border-signal-400 { border-color: rgb(255 77 0) !important; }
+.border-signal-550 { border-color: rgb(204 61 0) !important; }
+
+.fill-signal-400 { fill: #FF4D00 !important; }
+
+/* Ground palette: green-tinted dark → neutral black */
+.bg-ground-600 { background-color: rgb(13 13 13) !important; }
+.bg-ground-800 { background-color: rgb(13 13 13) !important; }
+.fill-ground-600 { fill: rgb(13 13 13) !important; }
+
+/* Download modal */
+#downloadModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+#downloadModal.open { display: flex; }
+
+#downloadModal .modal-box {
+  background: #F5F3EE;
+  color: #0D0D0D;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  max-width: 28rem;
+  width: 100%;
+  position: relative;
+}
+#downloadModal .modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #0D0D0D;
+  line-height: 1;
+}
+#downloadModal h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+#downloadModal p { margin: 0 0 1rem; line-height: 1.5; }
+#downloadModal .modal-step {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+#downloadModal .modal-step strong { display: block; margin-bottom: 0.25rem; }
+#downloadModal .modal-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #FF4D00;
+  font-weight: 600;
+  text-decoration: none;
+}
+#downloadModal .modal-link:hover { text-decoration: underline; }
