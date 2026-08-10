@@ -4,7 +4,23 @@ Static site for [8me.in](https://8me.in), built from the INTVL export with 8me.i
 
 ## Deploy to Hostinger
 
-Upload the entire `website/` folder contents to your web root, including the `_next/` directory.
+Upload the **entire** `website/` folder contents to your web root:
+
+```
+index.html
+css/
+js/
+_next/          ← must include BOTH subfolders below
+  *.jpg/png     ← root-level image aliases (heroGlobee458.jpg, etc.)
+  static/
+    media/      ← all images, fonts, SVGs
+    chunks/     ← JavaScript bundles
+    css/
+```
+
+**Common mistake:** uploading only `index.html` and `_next/static/` but missing the `_next/*.jpg` files at the root of `_next/`. The site needs the full `_next/` directory exactly as in the zip.
+
+**Do not** open `index.html` directly via `file://` — use an HTTP server or upload to Hostinger.
 
 ## Local preview
 
