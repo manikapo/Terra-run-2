@@ -1,51 +1,37 @@
-# 8me.in Landing Page
+# Infinite Me Website
 
-Static HTML port of the **INTVL** (intvl.com.au) Next.js landing page, adapted for **Infinite Me** with orange (`#FF4D00`) branding.
-
-Based on the exported INTVL source structure: stack cards, conversion column, scroll-driven "How it works", intro splash, viewport frame.
+Static site for [8me.in](https://8me.in), built from the INTVL export with 8me.in branding.
 
 ## Deploy to Hostinger
 
-Upload the entire `website/` folder contents to your **8me.in** root:
+Upload the entire `website/` folder contents to your web root, including the `_next/` directory.
 
-```
-index.html
-css/styles.css
-js/main.js
-js/scroll.js
-assets/          ← images from INTVL (globe, phone, stats, etc.)
-```
-
-Keep existing `tutorial.html` and `privacy.html`.
-
-## Preview locally
+## Local preview
 
 ```bash
-cd website && python3 -m http.server 8765
+cd website
+python3 -m http.server 8080
 ```
 
-Open http://localhost:8765 — **must use a local server** (not file://).
+Open http://localhost:8080 (must use HTTP server, not `file://`).
 
-## INTVL features ported
+## Files
 
-| Feature | Implementation |
-|---------|----------------|
-| Intro glyph punch | GSAP scale animation on orange bar |
-| Viewport frame | `assets/frame-orange.svg` + mobile frame |
-| Stack cards (×3) | Sticky sections scale to **0.94**, shade **0.45** |
-| Conversion column | Tall scroll area with phone hand + screen crossfade |
-| Hero globe | `assets/heroGlobe.c6079214.webp` + parallax |
-| How it works | `350vh+` scroll scrub, sticky phone, 3 screen states |
-| Stats pills | White card on cyclist photo |
-| Features grid | Runner photo background |
-| Integrations bar | Orange marquee |
-| FAQ accordion | Orange buttons |
-| Smooth scroll | Lenis + GSAP ScrollTrigger |
+- `index.html` — main page (INTVL scroll animations preserved)
+- `_next/` — CSS, JS, images, fonts from Next.js export
+- `css/8me-theme.css` — orange color overrides for 8me.in brand
+- `js/8me.js` — Android download modal + CTA link fixes
 
-## Color mapping
+## Brand colors
 
-| INTVL token | 8me.in value |
-|-------------|--------------|
-| signal-400 | `#FF4D00` |
-| ground-800 | `#070b06` |
-| ground-600 | `#192616` |
+| Token | Value |
+|-------|-------|
+| Orange | `#FF4D00` |
+| Black | `#0D0D0D` |
+| Off-white | `#F5F3EE` |
+
+## Links
+
+- Play: https://play.8me.in
+- Android testers: https://groups.google.com/g/infiniteme-testers
+- Play Store testing: https://play.google.com/apps/testing/in.me8.infiniteme
