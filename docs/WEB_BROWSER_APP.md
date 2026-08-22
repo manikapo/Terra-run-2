@@ -74,6 +74,8 @@ Upload `root-redirect.html` as `index.html` at site **root** so `run.8me.in` ope
 5. See your route (teal line) and **cells** count increase.
 6. Tap **Finish & claim** — territories sync to Render/Supabase.
 7. Colored hexes on map: **teal = yours**, **orange = others**.
+8. After finish, see **new / stolen / defended** cells and score.
+9. Tap **Ranks** for global and nearby leaderboards.
 
 ---
 

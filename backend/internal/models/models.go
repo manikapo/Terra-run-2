@@ -9,10 +9,10 @@ import (
 type ActivityStatus string
 
 const (
-	ActivityRecording ActivityStatus = "recording"
-	ActivityCompleted ActivityStatus = "completed"
-	ActivityVerified  ActivityStatus = "verified"
-	ActivityRejected  ActivityStatus = "rejected"
+	ActivityRecording   ActivityStatus = "recording"
+	ActivityCompleted   ActivityStatus = "completed"
+	ActivityVerified    ActivityStatus = "verified"
+	ActivityRejected    ActivityStatus = "rejected"
 	ActivityQuarantined ActivityStatus = "quarantined"
 )
 
@@ -25,9 +25,9 @@ type GPSPoint struct {
 }
 
 type CreateActivityRequest struct {
-	StartedAt   time.Time `json:"started_at"`
-	DeviceInfo  map[string]interface{} `json:"device_info,omitempty"`
-	IdempotencyKey string `json:"idempotency_key"`
+	StartedAt      time.Time              `json:"started_at"`
+	DeviceInfo     map[string]interface{} `json:"device_info,omitempty"`
+	IdempotencyKey string                 `json:"idempotency_key"`
 }
 
 type UploadPointsRequest struct {
@@ -35,36 +35,41 @@ type UploadPointsRequest struct {
 }
 
 type CompleteActivityRequest struct {
-	EndedAt      time.Time `json:"ended_at"`
-	DistanceM    float64   `json:"distance_m"`
-	DurationSec  int       `json:"duration_s"`
-	H3CellsHint  []string  `json:"h3_cells_hint,omitempty"`
+	EndedAt     time.Time `json:"ended_at"`
+	DistanceM   float64   `json:"distance_m"`
+	DurationSec int       `json:"duration_s"`
+	H3CellsHint []string  `json:"h3_cells_hint,omitempty"`
 }
 
 type CaptureResult struct {
-	NewCells      int   `json:"new_cells"`
-	TotalCells    int   `json:"total_cells"`
-	CaptureScore  int   `json:"capture_score"`
-	H3Cells       []string `json:"h3_cells"`
+	NewCells      int         `json:"new_cells"`
+	StolenCells   int         `json:"stolen_cells"`
+	DefendedCells int         `json:"defended_cells"`
+	TotalCells    int         `json:"total_cells"`
+	CaptureScore  int         `json:"capture_score"`
+	H3Cells       []string    `json:"h3_cells"`
+	StolenFrom    []uuid.UUID `json:"stolen_from,omitempty"`
 }
 
 type CompleteActivityResponse struct {
-	ActivityID    uuid.UUID     `json:"activity_id"`
+	ActivityID    uuid.UUID      `json:"activity_id"`
 	Status        ActivityStatus `json:"status"`
 	CaptureResult *CaptureResult `json:"capture_result,omitempty"`
-	TrustScore    int           `json:"trust_score"`
-	Message       string        `json:"message,omitempty"`
+	TrustScore    int            `json:"trust_score"`
+	Message       string         `json:"message,omitempty"`
 }
 
 type UserProfile struct {
-	UserID            uuid.UUID `json:"user_id"`
-	Username          string    `json:"username"`
-	DisplayName       string    `json:"display_name"`
-	AvatarURL         string    `json:"avatar_url,omitempty"`
-	CellsOwned        int       `json:"cells_owned"`
-	TerritoriesCaptured int     `json:"territories_captured"`
-	TotalCaptureScore int       `json:"total_capture_score"`
-	ActivityCount     int       `json:"activity_count"`
+	UserID              uuid.UUID `json:"user_id"`
+	Username            string    `json:"username"`
+	DisplayName         string    `json:"display_name"`
+	AvatarURL           string    `json:"avatar_url,omitempty"`
+	CellsOwned          int       `json:"cells_owned"`
+	TerritoriesCaptured int       `json:"territories_captured"`
+	TerritoriesStolen   int       `json:"territories_stolen"`
+	TerritoriesLost     int       `json:"territories_lost"`
+	TotalCaptureScore   int       `json:"total_capture_score"`
+	ActivityCount       int       `json:"activity_count"`
 }
 
 type TerritoryFeature struct {

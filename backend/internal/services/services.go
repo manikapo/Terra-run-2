@@ -96,15 +96,6 @@ func (s *ActivityService) Complete(ctx context.Context, activityID, userID uuid.
 
 	captureResult := &models.CaptureResult{H3Cells: cells, TotalCells: len(cells)}
 
-	if check.Status == models.ActivityVerified {
-		newCells, score, err := s.captureTerritories(ctx, userID, cells)
-		if err != nil {
-			return nil, err
-		}
-		captureResult.NewCells = newCells
-		captureResult.CaptureScore = score
-	}
-
 	filteredJson, err := json.Marshal(filtered)
 	if err != nil {
 		return nil, err
@@ -115,6 +106,12 @@ func (s *ActivityService) Complete(ctx context.Context, activityID, userID uuid.
 		return nil, err
 	}
 	defer tx.Rollback(ctx)
+
+	if check.Status == models.ActivityVerified {
+		if err := s.captureTerritories(ctx, tx, userID, activityID, cells, captureResult); err != nil {
+			return nil, err
+		}
+	}
 
 	_, err = tx.Exec(ctx, `
 		UPDATE activities SET
@@ -135,6 +132,11 @@ func (s *ActivityService) Complete(ctx context.Context, activityID, userID uuid.
 
 	if err := s.upsertUserStats(ctx, tx, userID); err != nil {
 		return nil, err
+	}
+	for _, victim := range captureResult.StolenFrom {
+		if err := s.upsertUserStats(ctx, tx, victim); err != nil {
+			return nil, err
+		}
 	}
 
 	if err := tx.Commit(ctx); err != nil {
@@ -169,12 +171,15 @@ func (s *ActivityService) loadPoints(ctx context.Context, activityID, userID uui
 	return points, nil
 }
 
-func (s *ActivityService) captureTerritories(ctx context.Context, userID uuid.UUID, cells []string) (int, int, error) {
-	newCells := 0
-	score := 0
+func (s *ActivityService) captureTerritories(ctx context.Context, tx pgx.Tx, userID, activityID uuid.UUID, cells []string, result *models.CaptureResult) error {
+	stolenFrom := map[uuid.UUID]struct{}{}
+	tileRes := s.cfg.H3TileResolution
+	if tileRes <= 0 {
+		tileRes = 7
+	}
 
 	for _, cellHex := range cells {
-		parent, err := h3util.ParentCell(cellHex, s.cfg.H3CaptureResolution-1)
+		parent, err := h3util.ParentCell(cellHex, tileRes)
 		if err != nil {
 			parent = cellHex
 		}
@@ -183,45 +188,98 @@ func (s *ActivityService) captureTerritories(ctx context.Context, userID uuid.UU
 		if err != nil {
 			h3Int = 0
 		}
-		tag, err := s.db.Exec(ctx, `
-			INSERT INTO territory_cells (h3_index, h3_index_hex, parent_h3_hex, owner_id, status, captured_at, capture_count)
-			VALUES ($1, $2, $3, $4, 'OWNED', now(), 1)
+
+		var existing *uuid.UUID
+		err = tx.QueryRow(ctx, `
+			SELECT owner_id FROM territory_cells WHERE h3_index_hex = $1 FOR UPDATE
+		`, cellHex).Scan(&existing)
+		if err != nil && err != pgx.ErrNoRows {
+			return err
+		}
+		if err == pgx.ErrNoRows {
+			existing = nil
+		}
+
+		outcome := models.ClassifyCell(existing, userID)
+		score := models.ScoreForOutcome(outcome)
+		result.CaptureScore += score
+
+		eventType := "CAPTURED"
+		var victim *uuid.UUID
+		switch outcome {
+		case models.OutcomeNeutral:
+			result.NewCells++
+		case models.OutcomeDefend:
+			result.DefendedCells++
+			eventType = "DEFENDED"
+		case models.OutcomeSteal:
+			result.StolenCells++
+			eventType = "STOLEN"
+			victim = existing
+			stolenFrom[*existing] = struct{}{}
+		}
+
+		_, err = tx.Exec(ctx, `
+			INSERT INTO territory_cells (
+				h3_index, h3_index_hex, parent_h3_hex, owner_id, status,
+				captured_at, last_defended_at, capture_count
+			)
+			VALUES ($1, $2, $3, $4, 'OWNED', now(), now(), 1)
 			ON CONFLICT (h3_index_hex) DO UPDATE SET
 				owner_id = EXCLUDED.owner_id,
-				captured_at = now(),
+				captured_at = CASE
+					WHEN territory_cells.owner_id IS DISTINCT FROM EXCLUDED.owner_id THEN now()
+					ELSE territory_cells.captured_at
+				END,
+				last_defended_at = now(),
 				capture_count = territory_cells.capture_count + 1,
-				status = 'OWNED'
-			WHERE territory_cells.owner_id IS NULL OR territory_cells.owner_id = EXCLUDED.owner_id
+				status = 'OWNED',
+				parent_h3_hex = EXCLUDED.parent_h3_hex
 		`, h3Int, cellHex, parent, userID)
 		if err != nil {
-			return newCells, score, err
+			return err
 		}
-		if tag.RowsAffected() > 0 {
-			// Count as new capture if we owned null or same user refresh
-			newCells++
-			score += 10
-			_, _ = s.db.Exec(ctx, `
-				INSERT INTO territory_events (id, event_type, h3_parent_hex, actor_id, metadata, created_at)
-				VALUES ($1, 'CAPTURED', $2, $3, $4, now())
-			`, uuid.New(), parent, userID, map[string]interface{}{"h3_cell": cellHex})
+
+		meta, _ := json.Marshal(map[string]interface{}{
+			"h3_cell": cellHex,
+			"score":   score,
+			"outcome": string(outcome),
+		})
+		_, err = tx.Exec(ctx, `
+			INSERT INTO territory_events (id, event_type, h3_parent_hex, actor_id, victim_id, activity_id, metadata, created_at)
+			VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, now())
+		`, uuid.New(), eventType, parent, userID, victim, activityID, meta)
+		if err != nil {
+			return err
 		}
 	}
-	return newCells, score, nil
+
+	for id := range stolenFrom {
+		result.StolenFrom = append(result.StolenFrom, id)
+	}
+	return nil
 }
 
 func (s *ActivityService) upsertUserStats(ctx context.Context, tx pgx.Tx, userID uuid.UUID) error {
 	_, err := tx.Exec(ctx, `
-		INSERT INTO user_territory_stats (user_id, cells_owned, territories_captured, total_capture_score, activity_count, updated_at)
+		INSERT INTO user_territory_stats (
+			user_id, cells_owned, territories_captured, territories_stolen, territories_lost,
+			total_capture_score, activity_count, updated_at
+		)
 		SELECT
 			$1,
 			(SELECT COUNT(*)::int FROM territory_cells WHERE owner_id = $1),
 			(SELECT COUNT(DISTINCT parent_h3_hex)::int FROM territory_cells WHERE owner_id = $1),
-			(SELECT COALESCE(SUM(capture_score), 0)::int FROM activities WHERE user_id = $1 AND status = 'verified'),
+			(SELECT COUNT(*)::int FROM territory_events WHERE actor_id = $1 AND event_type = 'STOLEN'),
+			(SELECT COUNT(*)::int FROM territory_events WHERE victim_id = $1 AND event_type = 'STOLEN'),
+			(SELECT COALESCE(SUM(capture_score), 0)::bigint FROM activities WHERE user_id = $1 AND status = 'verified'),
 			(SELECT COUNT(*)::int FROM activities WHERE user_id = $1 AND status IN ('verified', 'completed')),
 			now()
 		ON CONFLICT (user_id) DO UPDATE SET
 			cells_owned = EXCLUDED.cells_owned,
 			territories_captured = EXCLUDED.territories_captured,
+			territories_stolen = EXCLUDED.territories_stolen,
+			territories_lost = EXCLUDED.territories_lost,
 			total_capture_score = EXCLUDED.total_capture_score,
 			activity_count = EXCLUDED.activity_count,
 			updated_at = now()
@@ -262,18 +320,18 @@ func (s *TerritoryService) TileGeoJSON(ctx context.Context, tileHex string) (*mo
 	defer rows.Close()
 
 	ownerMap := make(map[string]struct {
-		OwnerID uuid.UUID
+		OwnerID *uuid.UUID
 		Status  string
 	})
 	for rows.Next() {
 		var hex string
-		var ownerID uuid.UUID
+		var ownerID *uuid.UUID
 		var status string
 		if err := rows.Scan(&hex, &ownerID, &status); err != nil {
 			return nil, err
 		}
 		ownerMap[hex] = struct {
-			OwnerID uuid.UUID
+			OwnerID *uuid.UUID
 			Status  string
 		}{ownerID, status}
 	}
@@ -284,12 +342,16 @@ func (s *TerritoryService) TileGeoJSON(ctx context.Context, tileHex string) (*mo
 		if err != nil {
 			continue
 		}
+		owner := ""
+		if info.OwnerID != nil {
+			owner = info.OwnerID.String()
+		}
 		features = append(features, models.TerritoryFeature{
 			Type: "Feature",
 			Properties: map[string]interface{}{
-				"h3":      hex,
-				"owner":   info.OwnerID.String(),
-				"status":  info.Status,
+				"h3":     hex,
+				"owner":  owner,
+				"status": info.Status,
 			},
 			Geometry: geom,
 		})
@@ -345,12 +407,14 @@ func (s *UserService) Profile(ctx context.Context, userID uuid.UUID) (*models.Us
 	err := s.db.QueryRow(ctx, `
 		SELECT u.id, u.username, u.display_name, COALESCE(u.avatar_url, ''),
 			COALESCE(s.cells_owned, 0), COALESCE(s.territories_captured, 0),
+			COALESCE(s.territories_stolen, 0), COALESCE(s.territories_lost, 0),
 			COALESCE(s.total_capture_score, 0), COALESCE(s.activity_count, 0)
 		FROM users u
 		LEFT JOIN user_territory_stats s ON s.user_id = u.id
 		WHERE u.id = $1
 	`, userID).Scan(&p.UserID, &p.Username, &p.DisplayName, &p.AvatarURL,
-		&p.CellsOwned, &p.TerritoriesCaptured, &p.TotalCaptureScore, &p.ActivityCount)
+		&p.CellsOwned, &p.TerritoriesCaptured, &p.TerritoriesStolen, &p.TerritoriesLost,
+		&p.TotalCaptureScore, &p.ActivityCount)
 	if err != nil {
 		return nil, err
 	}

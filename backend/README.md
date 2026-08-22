@@ -1,6 +1,6 @@
 # Backend API
 
-Go Fiber API for Territory Run Phase 1.
+Go Fiber API for Territory Run (Phase 1 capture + Phase 2 steal / leaderboards / decay).
 
 ## Local run
 

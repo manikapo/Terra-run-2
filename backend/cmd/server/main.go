@@ -74,12 +74,12 @@ func main() {
 	api.Get("/activities", auth, activityHandler.List)
 
 	api.Get("/territories/tile/:h3_tile", auth, territoryHandler.Tile)
+	api.Get("/leaderboards/global", auth, territoryHandler.GlobalLeaderboard)
+	api.Get("/leaderboards/local", auth, territoryHandler.LocalLeaderboard)
+	api.Get("/territory-events", auth, territoryHandler.Events)
 
-	// Phase 2: decay worker stub
 	internal := app.Group("/internal", middleware.InternalJobAuth(cfg.InternalJobSecret))
-	internal.Post("/jobs/decay", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"status": "ok", "message": "decay job stub — implement in Phase 2"})
-	})
+	internal.Post("/jobs/decay", territoryHandler.Decay)
 
 	go func() {
 		addr := ":" + cfg.Port

@@ -27,6 +27,43 @@ func (h *TerritoryHandler) Tile(c *fiber.Ctx) error {
 	return c.JSON(geo)
 }
 
+func (h *TerritoryHandler) GlobalLeaderboard(c *fiber.Ctx) error {
+	board, err := h.territories.GlobalLeaderboard(c.Context(), c.QueryInt("limit", 50))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(board)
+}
+
+func (h *TerritoryHandler) LocalLeaderboard(c *fiber.Ctx) error {
+	parent := c.Query("h3_parent")
+	if parent == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "h3_parent required"})
+	}
+	board, err := h.territories.LocalLeaderboard(c.Context(), parent, c.QueryInt("limit", 50))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(board)
+}
+
+func (h *TerritoryHandler) Events(c *fiber.Ctx) error {
+	userID := middleware.GetUserID(c)
+	events, err := h.territories.RecentEvents(c.Context(), userID, c.QueryInt("limit", 20))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(fiber.Map{"events": events})
+}
+
+func (h *TerritoryHandler) Decay(c *fiber.Ctx) error {
+	res, err := h.territories.Decay(c.Context())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(res)
+}
+
 type UserHandler struct {
 	users *services.UserService
 }
