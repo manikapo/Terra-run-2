@@ -147,7 +147,9 @@
     try {
       const p = await api("/api/v1/users/me");
       $("headerStats").textContent =
-        "Guest · Cells: " + p.cells_owned + " · Score: " + p.total_capture_score;
+        "Cells: " + p.cells_owned +
+        " · Score: " + p.total_capture_score +
+        " · Stolen: " + (p.territories_stolen || 0);
     } catch (e) {
       console.warn("profile", e);
     }
@@ -274,12 +276,24 @@
         }),
       });
 
-      const newCells = result.capture_result?.new_cells ?? 0;
+      const cr = result.capture_result || {};
+      const newCells = cr.new_cells ?? 0;
+      const stolen = cr.stolen_cells ?? 0;
+      const defended = cr.defended_cells ?? 0;
+      const score = cr.capture_score ?? 0;
       setStatus(
         $("runStatus"),
-        "Claimed! " + newCells + " new cells · " + result.status,
+        "Claimed! +" + newCells + " new · " + stolen + " stolen · " + result.status,
         "ok"
       );
+      $("sumNew").textContent = String(newCells);
+      $("sumStolen").textContent = String(stolen);
+      $("sumDefended").textContent = String(defended);
+      $("sumScore").textContent = String(score);
+      $("summaryStatus").textContent = result.status === "verified"
+        ? "Territory updated on the map."
+        : (result.message || result.status);
+      $("summarySheet").classList.remove("hidden");
 
       loadedTiles.clear();
       territoryLayer.clearLayers();
@@ -319,6 +333,38 @@
     }
   }
 
+  async function loadLeaderboard(kind) {
+    const list = $("leaderboardList");
+    list.innerHTML = "";
+    setStatus($("boardStatus"), "Loading…");
+    try {
+      let path = "/api/v1/leaderboards/global?limit=25";
+      if (kind === "local" && map) {
+        const c = map.getCenter();
+        const tileHex = h3.cellToString(h3.latLngToCell([c.lat, c.lng], TILE_RES));
+        path = "/api/v1/leaderboards/local?h3_parent=" + encodeURIComponent(tileHex) + "&limit=25";
+      }
+      const data = await api(path);
+      const entries = data.entries || [];
+      if (!entries.length) {
+        setStatus($("boardStatus"), "No ranks yet — finish a verified run.");
+        return;
+      }
+      entries.forEach((e) => {
+        const li = document.createElement("li");
+        if (e.user_id === guestId) li.classList.add("you");
+        li.innerHTML =
+          "<span class='rank'>#" + e.rank + "</span>" +
+          "<span>" + (e.display_name || e.username) + "</span>" +
+          "<span>" + e.total_capture_score + " pts · " + e.cells_owned + " cells</span>";
+        list.appendChild(li);
+      });
+      setStatus($("boardStatus"), data.scope || kind, "ok");
+    } catch (e) {
+      setStatus($("boardStatus"), "Could not load ranks: " + e.message, "error");
+    }
+  }
+
   $("btnGuestLogin").addEventListener("click", () => enterApp());
   $("btnNewGuest").addEventListener("click", () => {
     stopGpsWatch();
@@ -332,6 +378,28 @@
     setStatus($("runStatus"), paused ? "Paused" : "Recording…", paused ? "" : "ok");
   });
   $("btnFinish").addEventListener("click", finishRun);
+  $("btnLeaderboard").addEventListener("click", () => {
+    $("leaderboardSheet").classList.remove("hidden");
+    $("tabGlobal").classList.add("active");
+    $("tabLocal").classList.remove("active");
+    loadLeaderboard("global");
+  });
+  $("btnCloseLeaderboard").addEventListener("click", () => {
+    $("leaderboardSheet").classList.add("hidden");
+  });
+  $("tabGlobal").addEventListener("click", () => {
+    $("tabGlobal").classList.add("active");
+    $("tabLocal").classList.remove("active");
+    loadLeaderboard("global");
+  });
+  $("tabLocal").addEventListener("click", () => {
+    $("tabLocal").classList.add("active");
+    $("tabGlobal").classList.remove("active");
+    loadLeaderboard("local");
+  });
+  $("btnCloseSummary").addEventListener("click", () => {
+    $("summarySheet").classList.add("hidden");
+  });
   $("btnRefreshTiles").addEventListener("click", () => {
     loadedTiles.clear();
     territoryLayer.clearLayers();

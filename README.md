@@ -1,6 +1,8 @@
 # Territory Run — Phase 1 MVP
 
-GPS territory capture running app (Strava-inspired). Phase 1: capture-only territories, Google auth, offline GPS tracking, Render API, Supabase DB, Cloudflare R2 OTA.
+GPS territory capture running app (Strava / INTVL-inspired). Phase 1: capture-only territories. Phase 2: steal, leaderboards, decay.
+
+Full layout: **[docs/INTVL_LAYOUT.md](docs/INTVL_LAYOUT.md)**.
 
 ## Repository layout
 
@@ -32,9 +34,11 @@ territory-run/
 - [x] Basic territory map tiles (GeoJSON API)
 - [x] User profile stats
 - [x] OTA profile page (WebView)
-- [ ] Territory steal (Phase 2)
-- [ ] FCM push (Phase 2)
-- [ ] Strava login (Phase 2)
+- [x] Territory steal (Phase 2 — H3 cell takeover)
+- [x] Global / local leaderboards
+- [x] Territory decay cron
+- [ ] FCM push (later)
+- [ ] Strava login (later)
 
 ## Environment variables
 

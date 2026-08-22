@@ -6,13 +6,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Territory Run</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/app.css?v=3" />
+  <link rel="stylesheet" href="css/app.css?v=4" />
 </head>
 <body>
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <h2>Territory Run</h2>
       <p>GPS territory runs in your browser. Continue as guest to start — Google login comes in Phase 1.2.</p>
+      <p class="login-hint">Claim cells by running. Steal rivals. Climb the leaderboard.</p>
       <button id="btnGuestLogin" class="btn btn-primary" style="width:100%">Continue as Guest</button>
       <p class="status-bar" id="loginStatus">Set API_BASE_URL in js/config.js</p>
     </div>
@@ -25,6 +26,7 @@
         <div class="stats" id="headerStats">Guest · Cells: 0 · Score: 0</div>
       </div>
       <div style="display:flex;gap:8px">
+        <button id="btnLeaderboard" class="btn btn-ghost">Ranks</button>
         <button id="btnRefreshTiles" class="btn btn-ghost">Refresh map</button>
         <button id="btnNewGuest" class="btn btn-ghost">New guest</button>
       </div>
@@ -47,9 +49,38 @@
     </div>
   </div>
 
+  <div id="leaderboardSheet" class="sheet hidden">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <h2>Leaderboard</h2>
+        <button id="btnCloseLeaderboard" class="btn btn-ghost">Close</button>
+      </div>
+      <div class="tabs">
+        <button id="tabGlobal" class="tab active">Global</button>
+        <button id="tabLocal" class="tab">Nearby</button>
+      </div>
+      <ol id="leaderboardList" class="board-list"></ol>
+      <p class="status-bar" id="boardStatus"></p>
+    </div>
+  </div>
+
+  <div id="summarySheet" class="sheet hidden">
+    <div class="sheet-card">
+      <h2>Run claimed</h2>
+      <div class="summary-grid">
+        <div class="metric"><div class="val" id="sumNew">0</div><div class="lbl">new</div></div>
+        <div class="metric"><div class="val" id="sumStolen">0</div><div class="lbl">stolen</div></div>
+        <div class="metric"><div class="val" id="sumDefended">0</div><div class="lbl">defended</div></div>
+        <div class="metric"><div class="val" id="sumScore">0</div><div class="lbl">score</div></div>
+      </div>
+      <p class="status-bar" id="summaryStatus"></p>
+      <button id="btnCloseSummary" class="btn btn-primary" style="width:100%">Back to map</button>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/h3-js@4.1.0/dist/browser/h3-js.min.js"></script>
-  <script src="js/config.js?v=3"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/config.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
 </body>
 </html>

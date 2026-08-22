@@ -1,4 +1,19 @@
-name: Territory decay job (stub)
+name: Territory decay job
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # daily 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  decay:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Neutralize undefended cells
+        run: |
+          curl -sf -X POST \
+            -H "X-Internal-Secret: ${{ secrets.INTERNAL_JOB_SECRET }}" \
+            "${{ secrets.API_BASE_URL }}/internal/jobs/decay"
 
 on:
   schedule:

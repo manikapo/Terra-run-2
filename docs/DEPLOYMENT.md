@@ -31,6 +31,9 @@ Where to upload each piece and in what order.
 1. Dashboard → **SQL Editor** → New query.
 2. Paste contents of `supabase/migrations/001_initial_schema.sql`.
 3. Run.
+4. Then paste and run `supabase/migrations/002_phase2_steal_leaderboards.sql` (steal events, leaderboards, battles).
+
+Full product layout: [INTVL_LAYOUT.md](INTVL_LAYOUT.md).
 
 ### 1.3 Google OAuth
 
