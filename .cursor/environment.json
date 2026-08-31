@@ -1,0 +1,30 @@
+{
+  "name": "Territory Run",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "user": "ubuntu",
+  "install": ".cursor/scripts/install.sh",
+  "start": ".cursor/scripts/start.sh",
+  "terminals": [
+    {
+      "name": "api",
+      "command": "cd backend && go run ./cmd/server"
+    },
+    {
+      "name": "ota-web",
+      "command": "python3 -m http.server 3000 --directory ota/public --bind 0.0.0.0"
+    }
+  ],
+  "ports": [
+    {
+      "name": "api",
+      "port": 8080
+    },
+    {
+      "name": "ota-web",
+      "port": 3000
+    }
+  ]
+}
